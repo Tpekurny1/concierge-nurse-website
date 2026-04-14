@@ -77,6 +77,35 @@ async function addNote(contactId, content) {
   await supabase.from('notes').insert({ contact_id: contactId, content });
 }
 
+async function assignPipeline(contactId, pipelineName) {
+  // Find pipeline
+  const { data: pipeline } = await supabase
+    .from('pipelines')
+    .select('id, stages')
+    .eq('name', pipelineName)
+    .single();
+
+  if (!pipeline) return;
+
+  // Check if already in this pipeline
+  const { data: existing } = await supabase
+    .from('pipeline_contacts')
+    .select('id')
+    .eq('pipeline_id', pipeline.id)
+    .eq('contact_id', contactId)
+    .single();
+
+  if (existing) return; // Already in pipeline, don't reset their stage
+
+  const firstStage = pipeline.stages?.[0] || 'New';
+
+  await supabase.from('pipeline_contacts').insert({
+    pipeline_id: pipeline.id,
+    contact_id: contactId,
+    stage: firstStage,
+  });
+}
+
 async function logActivity(contactId, description, metadata) {
   await supabase.from('activity_log').insert({
     contact_id: contactId,
@@ -143,6 +172,7 @@ export async function submitContactForm({ first_name, last_name, email, interest
   await assignTag(contactId, 'Contact Form Lead');
   await addNote(contactId, message);
   await logActivity(contactId, `Submitted contact form — interest: ${interest}`, meta);
+  await assignPipeline(contactId, 'General');
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -191,6 +221,7 @@ export async function submitConsultingInquiry({ full_name, email, business_name,
   await assignTag(contactId, 'Consulting Inquiry');
   await addNote(contactId, biggest_challenge);
   await logActivity(contactId, 'Submitted consulting inquiry', meta);
+  await assignPipeline(contactId, 'Consulting');
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -234,6 +265,7 @@ export async function submitAcceleratorWaitlist({ full_name, email }) {
 
   await assignTag(contactId, 'Accelerator Waitlist');
   await logActivity(contactId, 'Joined accelerator waitlist', meta);
+  await assignPipeline(contactId, 'Accelerator');
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -273,6 +305,7 @@ export async function submitSubscribe({ email, first_name, source }) {
 
   await assignTag(contactId, tagName);
   await logActivity(contactId, `Subscribed via ${source.replace(/_/g, ' ')}`, meta);
+  await assignPipeline(contactId, 'General');
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }

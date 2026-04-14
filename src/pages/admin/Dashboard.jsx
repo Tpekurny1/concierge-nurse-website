@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, UserPlus, Mail, TrendingUp, RefreshCw, Eye, BarChart3, Globe } from 'lucide-react';
+import { Users, UserPlus, Mail, TrendingUp, RefreshCw, Eye, BarChart3, Globe, GitBranch } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const RANGE_OPTIONS = [
@@ -23,6 +23,9 @@ export default function Dashboard() {
   const [recentLeads, setRecentLeads] = useState([]);
   const [loading, setLoading] = useState(true);
   const hasLoaded = useRef(false);
+
+  // Pipeline state
+  const [pipelineSummary, setPipelineSummary] = useState([]);
 
   // Analytics state
   const [range, setRange] = useState(7);
@@ -145,6 +148,30 @@ export default function Dashboard() {
   useEffect(() => {
     loadAnalytics();
   }, [loadAnalytics]);
+
+  // Load pipeline summary
+  useEffect(() => {
+    async function loadPipelines() {
+      const { data: pipelines } = await supabase.from('pipelines').select('id, name, stages').order('created_at');
+      if (!pipelines) return;
+
+      const { data: allPc } = await supabase.from('pipeline_contacts').select('pipeline_id, stage');
+
+      const summary = pipelines.map((p) => {
+        const stages = typeof p.stages === 'string' ? JSON.parse(p.stages) : p.stages;
+        const contacts = (allPc || []).filter((pc) => pc.pipeline_id === p.id);
+        const stageCounts = {};
+        stages.forEach((s) => { stageCounts[s] = 0; });
+        contacts.forEach((pc) => {
+          if (stageCounts[pc.stage] !== undefined) stageCounts[pc.stage]++;
+        });
+        return { id: p.id, name: p.name, stages, stageCounts, total: contacts.length };
+      });
+
+      setPipelineSummary(summary);
+    }
+    loadPipelines();
+  }, []);
 
   if (loading) {
     return (
@@ -306,6 +333,47 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
+
+      {/* ── Pipeline Summary ── */}
+      {pipelineSummary.length > 0 && (
+        <div className="mb-10">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center gap-2">
+              <GitBranch size={18} className="text-gold" />
+              <h2 className="font-heading text-lg font-bold text-navy">Pipelines</h2>
+            </div>
+            <Link to="/admin/pipelines" className="text-gold text-sm font-semibold no-underline hover:underline">
+              View Board
+            </Link>
+          </div>
+
+          <div className="grid lg:grid-cols-3 gap-4">
+            {pipelineSummary.map((p) => (
+              <div key={p.id} className="bg-white border border-cream-dark p-5">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="font-heading text-base font-bold text-navy">{p.name}</h3>
+                  <span className="text-[0.65rem] font-semibold text-charcoal/30">{p.total} total</span>
+                </div>
+                <div className="space-y-2">
+                  {p.stages.map((stage) => {
+                    const count = p.stageCounts[stage] || 0;
+                    const pct = p.total > 0 ? (count / p.total) * 100 : 0;
+                    return (
+                      <div key={stage} className="flex items-center gap-3">
+                        <span className="text-xs text-charcoal/50 w-28 shrink-0 truncate">{stage}</span>
+                        <div className="flex-1 bg-cream h-2">
+                          <div className="h-full bg-gold/60 transition-all" style={{ width: `${pct}%` }} />
+                        </div>
+                        <span className="text-xs text-charcoal/40 w-6 text-right shrink-0">{count}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Recent leads */}
       <div className="bg-white border border-cream-dark">

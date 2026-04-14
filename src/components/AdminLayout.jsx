@@ -1,10 +1,11 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Tag, Send, Upload, Settings, LogOut } from 'lucide-react';
+import { LayoutDashboard, Users, Tag, Send, Upload, Settings, LogOut, GitBranch } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const navItems = [
   { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
   { label: 'Leads', path: '/admin/leads', icon: Users },
+  { label: 'Pipelines', path: '/admin/pipelines', icon: GitBranch },
   { label: 'Segments', path: '/admin/segments', icon: Tag },
   { label: 'Campaigns', path: '/admin/campaigns', icon: Send },
   { label: 'Import', path: '/admin/import', icon: Upload },
