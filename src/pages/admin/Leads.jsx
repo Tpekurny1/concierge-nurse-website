@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
@@ -29,8 +29,10 @@ export default function Leads() {
     setPage(0);
   }
 
-  const load = useCallback(async (isInitial = false) => {
-    if (isInitial) setLoading(true);
+  const hasLoaded = useRef(false);
+
+  const load = useCallback(async () => {
+    if (!hasLoaded.current) setLoading(true);
 
     let query = supabase
       .from('contacts')
@@ -51,10 +53,11 @@ export default function Leads() {
     setLeads(data || []);
     setTotal(count || 0);
     setLoading(false);
+    hasLoaded.current = true;
   }, [page, search, filter, sortCol, sortAsc]);
 
   useEffect(() => {
-    load(true);
+    load();
 
     const channel = supabase
       .channel('leads-contacts')
@@ -142,7 +145,7 @@ export default function Leads() {
     await supabase.from('contacts').delete().in('id', ids);
     setSelected(new Set());
     setDeleteConfirm(false);
-    load(true);
+    load();
   }
 
   return (
