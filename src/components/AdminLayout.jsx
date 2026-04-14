@@ -1,5 +1,5 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, Tag, Send, Upload, Settings, LogOut, GitBranch } from 'lucide-react';
+import { LayoutDashboard, Users, Tag, Send, Settings, LogOut, GitBranch } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 
 const navItems = [
@@ -8,7 +8,6 @@ const navItems = [
   { label: 'Pipelines', path: '/admin/pipelines', icon: GitBranch },
   { label: 'Segments', path: '/admin/segments', icon: Tag },
   { label: 'Campaigns', path: '/admin/campaigns', icon: Send },
-  { label: 'Import', path: '/admin/import', icon: Upload },
   { label: 'Settings', path: '/admin/settings', icon: Settings },
 ];
 

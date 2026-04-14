@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X, ArrowUp, ArrowDown, ArrowUpDown, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const PAGE_SIZE = 25;
@@ -175,13 +175,19 @@ export default function Leads() {
           <option value="Builder">Builder</option>
           <option value="Established Owner">Established Owner</option>
         </select>
+        <Link
+          to="/admin/import"
+          className="btn-navy text-sm flex items-center gap-2 shrink-0 no-underline"
+        >
+          <Upload size={14} /> Import
+        </Link>
         <button
           onClick={handleExportAll}
           disabled={exporting}
           className="btn-navy text-sm flex items-center gap-2 shrink-0"
         >
           <Download size={14} />
-          {exporting ? 'Exporting...' : 'Export CSV'}
+          {exporting ? 'Exporting...' : 'Export'}
         </button>
       </div>
 
