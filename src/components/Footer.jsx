@@ -161,6 +161,9 @@ export default function Footer() {
             <a href="#" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
               Terms
             </a>
+            <Link to="/admin/login" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
+              Login
+            </Link>
           </div>
         </div>
       </div>
