@@ -16,39 +16,64 @@ const STAGE_COLORS = {
   Closed: 'border-l-charcoal/30',
 };
 
+// Hardcoded fallback in case the DB stages column is empty/broken
+const DEFAULT_PIPELINES = {
+  Accelerator: ['New', 'Contacted', 'Consult Booked', 'Enrolled', 'Completed'],
+  Consulting: ['New', 'Contacted', 'Discovery Call', 'Proposal Sent', 'Active Client'],
+  General: ['New', 'Contacted', 'Nurturing', 'Converted', 'Closed'],
+};
+
+function parseStages(raw) {
+  if (Array.isArray(raw)) return raw;
+  if (typeof raw === 'string') {
+    try { return JSON.parse(raw); } catch { return []; }
+  }
+  return [];
+}
+
 export default function Pipelines() {
   const [pipelines, setPipelines] = useState([]);
   const [activePipeline, setActivePipeline] = useState(null);
   const [pipelineContacts, setPipelineContacts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const hasLoaded = useRef(false);
+  const [dbError, setDbError] = useState('');
   const dragItem = useRef(null);
-  const dragOverStage = useRef(null);
 
+  // Load pipelines
   useEffect(() => {
-    async function loadPipelines() {
-      if (!hasLoaded.current) setLoading(true);
+    async function init() {
+      setLoading(true);
 
-      const { data: pipelineData } = await supabase
+      const { data, error } = await supabase
         .from('pipelines')
         .select('*')
         .order('created_at');
 
-      const list = (pipelineData || []).map((p) => ({
-        ...p,
-        stages: typeof p.stages === 'string' ? JSON.parse(p.stages) : (p.stages || []),
-      }));
-
-      setPipelines(list);
-
-      if (!activePipeline && list.length > 0) {
-        setActivePipeline(list[0].id);
+      if (error) {
+        setDbError(error.message);
+        setLoading(false);
+        return;
       }
 
+      if (!data || data.length === 0) {
+        setDbError('No pipelines found. Run the supabase-pipelines-migration.sql in your Supabase SQL Editor.');
+        setLoading(false);
+        return;
+      }
+
+      const list = data.map((p) => {
+        const stages = parseStages(p.stages);
+        return {
+          ...p,
+          stages: stages.length > 0 ? stages : (DEFAULT_PIPELINES[p.name] || []),
+        };
+      });
+
+      setPipelines(list);
+      setActivePipeline(list[0].id);
       setLoading(false);
-      hasLoaded.current = true;
     }
-    loadPipelines();
+    init();
   }, []);
 
   // Load contacts when active pipeline changes
@@ -56,21 +81,20 @@ export default function Pipelines() {
     if (!activePipeline) return;
 
     async function loadContacts() {
-      const { data: pcData } = await supabase
+      const { data } = await supabase
         .from('pipeline_contacts')
         .select('*, contacts(id, first_name, last_name, email, interest, lifecycle_stage)')
         .eq('pipeline_id', activePipeline)
         .order('entered_stage_at', { ascending: true });
 
-      setPipelineContacts(pcData || []);
+      setPipelineContacts(data || []);
     }
     loadContacts();
   }, [activePipeline]);
 
   function getStages() {
-    const p = pipelines.find((p) => p.id === activePipeline);
-    if (!p) return [];
-    return Array.isArray(p.stages) ? p.stages : [];
+    const p = pipelines.find((pl) => pl.id === activePipeline);
+    return p?.stages || [];
   }
 
   function getContactsInStage(stage) {
@@ -85,14 +109,12 @@ export default function Pipelines() {
     return `${days} days`;
   }
 
-  // Drag and drop
   function handleDragStart(pc) {
     dragItem.current = pc;
   }
 
-  function handleDragOver(e, stage) {
+  function handleDragOver(e) {
     e.preventDefault();
-    dragOverStage.current = stage;
   }
 
   async function handleDrop(e, targetStage) {
@@ -100,7 +122,6 @@ export default function Pipelines() {
     const pc = dragItem.current;
     if (!pc || pc.stage === targetStage) {
       dragItem.current = null;
-      dragOverStage.current = null;
       return;
     }
 
@@ -113,13 +134,11 @@ export default function Pipelines() {
       )
     );
 
-    // Persist
     await supabase
       .from('pipeline_contacts')
       .update({ stage: targetStage, entered_stage_at: new Date().toISOString() })
       .eq('id', pc.id);
 
-    // Log activity
     await supabase.from('activity_log').insert({
       contact_id: pc.contact_id,
       type: 'status_change',
@@ -128,22 +147,31 @@ export default function Pipelines() {
     });
 
     dragItem.current = null;
-    dragOverStage.current = null;
   }
 
   function handleDragEnd() {
     dragItem.current = null;
-    dragOverStage.current = null;
   }
 
   const stages = getStages();
-  const currentPipeline = pipelines.find((p) => p.id === activePipeline);
 
   if (loading) {
     return (
       <div className="text-center py-10">
         <div className="w-8 h-8 border-2 border-gold border-t-transparent rounded-full animate-spin mx-auto mb-4" />
         <p className="text-slate text-sm">Loading pipelines...</p>
+      </div>
+    );
+  }
+
+  if (dbError) {
+    return (
+      <div>
+        <h1 className="font-heading text-2xl font-bold text-navy mb-6">Pipelines</h1>
+        <div className="bg-red-50 border border-red-200 p-6">
+          <p className="text-red-700 text-sm font-semibold mb-2">Pipeline Setup Required</p>
+          <p className="text-red-600 text-sm">{dbError}</p>
+        </div>
       </div>
     );
   }
@@ -156,27 +184,30 @@ export default function Pipelines() {
 
       {/* Pipeline tabs */}
       <div className="flex border-b border-cream-dark mb-6">
-        {pipelines.map((p) => (
-          <button
-            key={p.id}
-            onClick={() => setActivePipeline(p.id)}
-            className={`px-5 py-3 text-sm font-semibold transition-colors relative ${
-              activePipeline === p.id
-                ? 'text-navy'
-                : 'text-charcoal/40 hover:text-charcoal'
-            }`}
-          >
-            {p.name}
-            {activePipeline === p.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />
-            )}
-            <span className="ml-2 text-[0.65rem] text-charcoal/30">
-              {pipelineContacts.filter(() => p.id === activePipeline).length > 0 && activePipeline === p.id
-                ? pipelineContacts.length
-                : ''}
-            </span>
-          </button>
-        ))}
+        {pipelines.map((p) => {
+          const count = activePipeline === p.id ? pipelineContacts.length : null;
+          return (
+            <button
+              key={p.id}
+              onClick={() => setActivePipeline(p.id)}
+              className={`px-5 py-3 text-sm font-semibold transition-colors relative ${
+                activePipeline === p.id
+                  ? 'text-navy'
+                  : 'text-charcoal/40 hover:text-charcoal'
+              }`}
+            >
+              {p.name}
+              {count !== null && count > 0 && (
+                <span className="ml-2 text-[0.6rem] bg-gold text-navy px-1.5 py-0.5 font-bold">
+                  {count}
+                </span>
+              )}
+              {activePipeline === p.id && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-gold" />
+              )}
+            </button>
+          );
+        })}
       </div>
 
       {/* Kanban board */}
@@ -189,7 +220,7 @@ export default function Pipelines() {
             return (
               <div
                 key={stage}
-                onDragOver={(e) => handleDragOver(e, stage)}
+                onDragOver={handleDragOver}
                 onDrop={(e) => handleDrop(e, stage)}
                 className="flex-shrink-0 w-72 flex flex-col"
               >
