@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X, ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 
 const PAGE_SIZE = 25;
@@ -16,6 +16,18 @@ export default function Leads() {
   const [exporting, setExporting] = useState(false);
   const [tags, setTags] = useState([]);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
+  const [sortCol, setSortCol] = useState('created_at');
+  const [sortAsc, setSortAsc] = useState(false);
+
+  function handleSort(col) {
+    if (sortCol === col) {
+      setSortAsc((prev) => !prev);
+    } else {
+      setSortCol(col);
+      setSortAsc(true);
+    }
+    setPage(0);
+  }
 
   const load = useCallback(async (isInitial = false) => {
     if (isInitial) setLoading(true);
@@ -23,7 +35,7 @@ export default function Leads() {
     let query = supabase
       .from('contacts')
       .select('*', { count: 'exact' })
-      .order('created_at', { ascending: false })
+      .order(sortCol, { ascending: sortAsc })
       .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
 
     if (search) {
@@ -39,7 +51,7 @@ export default function Leads() {
     setLeads(data || []);
     setTotal(count || 0);
     setLoading(false);
-  }, [page, search, filter]);
+  }, [page, search, filter, sortCol, sortAsc]);
 
   useEffect(() => {
     load(true);
@@ -242,11 +254,28 @@ export default function Leads() {
                         className="accent-gold"
                       />
                     </th>
-                    <th className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40">Name</th>
-                    <th className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40">Email</th>
-                    <th className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40">Stage</th>
-                    <th className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40">Source</th>
-                    <th className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40">Date</th>
+                    {[
+                      { key: 'first_name', label: 'Name' },
+                      { key: 'email', label: 'Email' },
+                      { key: 'lifecycle_stage', label: 'Stage' },
+                      { key: 'source', label: 'Source' },
+                      { key: 'created_at', label: 'Date' },
+                    ].map((col) => (
+                      <th
+                        key={col.key}
+                        onClick={() => handleSort(col.key)}
+                        className="px-5 py-3 text-[0.65rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 cursor-pointer select-none hover:text-charcoal transition-colors group"
+                      >
+                        <span className="inline-flex items-center gap-1.5">
+                          {col.label}
+                          {sortCol === col.key ? (
+                            sortAsc ? <ArrowUp size={12} className="text-gold" /> : <ArrowDown size={12} className="text-gold" />
+                          ) : (
+                            <ArrowUpDown size={12} className="text-charcoal/20 group-hover:text-charcoal/40 transition-colors" />
+                          )}
+                        </span>
+                      </th>
+                    ))}
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-cream-dark">
