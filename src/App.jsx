@@ -20,6 +20,7 @@ import Resources from './pages/Resources';
 
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
+const AdminRegister = lazy(() => import('./pages/admin/Register'));
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminLeads = lazy(() => import('./pages/admin/Leads'));
 const AdminLeadDetail = lazy(() => import('./pages/admin/LeadDetail'));
@@ -343,6 +344,7 @@ export default function App() {
 
           {/* Admin — no Navbar/Footer, own layout */}
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/register" element={<AdminRegister />} />
           <Route
             path="/admin"
             element={
