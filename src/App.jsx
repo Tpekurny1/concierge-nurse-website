@@ -27,9 +27,13 @@ const AdminLeadDetail = lazy(() => import('./pages/admin/LeadDetail'));
 const AdminSegments = lazy(() => import('./pages/admin/Segments'));
 const AdminCampaigns = lazy(() => import('./pages/admin/Campaigns'));
 const AdminNewEmailCampaign = lazy(() => import('./pages/admin/NewEmailCampaign'));
+const AdminEditEmailCampaign = lazy(() => import('./pages/admin/EditEmailCampaign'));
 const AdminNewSMSCampaign = lazy(() => import('./pages/admin/NewSMSCampaign'));
 const AdminCampaignDetail = lazy(() => import('./pages/admin/CampaignDetail'));
 const AdminPipelines = lazy(() => import('./pages/admin/Pipelines'));
+const AdminSequences = lazy(() => import('./pages/admin/Sequences'));
+const AdminSequenceEditor = lazy(() => import('./pages/admin/SequenceEditor'));
+const AdminSequenceDetail = lazy(() => import('./pages/admin/SequenceDetail'));
 const AdminImport = lazy(() => import('./pages/admin/Import'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings'));
 
@@ -360,8 +364,13 @@ export default function App() {
             <Route path="segments" element={<AdminSegments />} />
             <Route path="campaigns" element={<AdminCampaigns />} />
             <Route path="campaigns/email/new" element={<AdminNewEmailCampaign />} />
+            <Route path="campaigns/email/:id/edit" element={<AdminEditEmailCampaign />} />
             <Route path="campaigns/sms/new" element={<AdminNewSMSCampaign />} />
             <Route path="campaigns/:id" element={<AdminCampaignDetail />} />
+            <Route path="sequences" element={<AdminSequences />} />
+            <Route path="sequences/new" element={<AdminSequenceEditor />} />
+            <Route path="sequences/:id" element={<AdminSequenceDetail />} />
+            <Route path="sequences/:id/edit" element={<AdminSequenceEditor />} />
             <Route path="import" element={<AdminImport />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>

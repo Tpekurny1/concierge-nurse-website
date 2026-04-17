@@ -106,6 +106,42 @@ async function assignPipeline(contactId, pipelineName) {
   });
 }
 
+async function enrollInSequences(contactId) {
+  const { data: contactTags } = await supabase
+    .from('contact_tags')
+    .select('tag_id')
+    .eq('contact_id', contactId);
+
+  const tagIds = (contactTags || []).map((ct) => ct.tag_id);
+  if (tagIds.length === 0) return;
+
+  const { data: sequences } = await supabase
+    .from('sequences')
+    .select('id, trigger_tag_id')
+    .eq('status', 'active')
+    .in('trigger_tag_id', tagIds);
+
+  if (!sequences || sequences.length === 0) return;
+
+  for (const seq of sequences) {
+    const { data: existing } = await supabase
+      .from('sequence_enrollments')
+      .select('id')
+      .eq('sequence_id', seq.id)
+      .eq('contact_id', contactId)
+      .maybeSingle();
+
+    if (!existing) {
+      await supabase.from('sequence_enrollments').insert({
+        sequence_id: seq.id,
+        contact_id: contactId,
+        current_position: 0,
+        status: 'active',
+      });
+    }
+  }
+}
+
 async function logActivity(contactId, description, metadata) {
   await supabase.from('activity_log').insert({
     contact_id: contactId,
@@ -173,6 +209,7 @@ export async function submitContactForm({ first_name, last_name, email, interest
   await addNote(contactId, message);
   await logActivity(contactId, `Submitted contact form — interest: ${interest}`, meta);
   await assignPipeline(contactId, 'General');
+  await enrollInSequences(contactId);
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -222,6 +259,7 @@ export async function submitConsultingInquiry({ full_name, email, business_name,
   await addNote(contactId, biggest_challenge);
   await logActivity(contactId, 'Submitted consulting inquiry', meta);
   await assignPipeline(contactId, 'Consulting');
+  await enrollInSequences(contactId);
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -266,6 +304,7 @@ export async function submitAcceleratorWaitlist({ full_name, email }) {
   await assignTag(contactId, 'Accelerator Waitlist');
   await logActivity(contactId, 'Joined accelerator waitlist', meta);
   await assignPipeline(contactId, 'Accelerator');
+  await enrollInSequences(contactId);
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
@@ -306,6 +345,7 @@ export async function submitSubscribe({ email, first_name, source }) {
   await assignTag(contactId, tagName);
   await logActivity(contactId, `Subscribed via ${source.replace(/_/g, ' ')}`, meta);
   await assignPipeline(contactId, 'General');
+  await enrollInSequences(contactId);
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
