@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
-import { useAuth } from '../../lib/AuthContext';
 import ImageUpload from '../../components/admin/ImageUpload';
 
 const DEFAULT_BRAND_FORM = {
@@ -18,23 +17,12 @@ const DEFAULT_BRAND_FORM = {
 };
 
 export default function Settings() {
-  const { session } = useAuth();
   const [brand, setBrand] = useState(DEFAULT_BRAND_FORM);
   const [brandRowId, setBrandRowId] = useState(null);
   const [brandLoading, setBrandLoading] = useState(true);
   const [brandSaving, setBrandSaving] = useState(false);
   const [brandError, setBrandError] = useState('');
 
-  const [profile, setProfile] = useState({
-    businessName: '',
-    timezone: 'ET',
-  });
-  const [integrations, setIntegrations] = useState({
-    resendKey: '',
-    twilioSid: '',
-    twilioToken: '',
-    twilioPhone: '',
-  });
   const [saved, setSaved] = useState({});
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [deleting, setDeleting] = useState(false);
@@ -63,16 +51,6 @@ export default function Settings() {
     }
     loadBrand();
 
-    setProfile({
-      businessName: localStorage.getItem('cnbs_business_name') || '',
-      timezone: localStorage.getItem('cnbs_timezone') || 'ET',
-    });
-    setIntegrations({
-      resendKey: localStorage.getItem('cnbs_resend_key') || '',
-      twilioSid: localStorage.getItem('cnbs_twilio_sid') || '',
-      twilioToken: localStorage.getItem('cnbs_twilio_token') || '',
-      twilioPhone: localStorage.getItem('cnbs_twilio_phone') || '',
-    });
   }, []);
 
   async function saveBrand() {
@@ -103,25 +81,6 @@ export default function Settings() {
       setTimeout(() => setSaved((s) => ({ ...s, brand: false })), 2000);
     }
     setBrandSaving(false);
-  }
-
-  function saveProfile() {
-    localStorage.setItem('cnbs_business_name', profile.businessName);
-    localStorage.setItem('cnbs_timezone', profile.timezone);
-    setSaved((s) => ({ ...s, profile: true }));
-    setTimeout(() => setSaved((s) => ({ ...s, profile: false })), 2000);
-  }
-
-  function saveIntegration(key) {
-    if (key === 'resend') {
-      localStorage.setItem('cnbs_resend_key', integrations.resendKey);
-    } else {
-      localStorage.setItem('cnbs_twilio_sid', integrations.twilioSid);
-      localStorage.setItem('cnbs_twilio_token', integrations.twilioToken);
-      localStorage.setItem('cnbs_twilio_phone', integrations.twilioPhone);
-    }
-    setSaved((s) => ({ ...s, [key]: true }));
-    setTimeout(() => setSaved((s) => ({ ...s, [key]: false })), 2000);
   }
 
   async function handleExport() {
@@ -307,124 +266,6 @@ export default function Settings() {
               </button>
             </div>
           )}
-        </div>
-
-        {/* Profile */}
-        <div className="bg-white border border-cream-dark p-6">
-          <h3 className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 mb-4">Profile</h3>
-          <div className="space-y-4">
-            <div>
-              <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Business Name</label>
-              <input
-                type="text"
-                value={profile.businessName}
-                onChange={(e) => setProfile({ ...profile, businessName: e.target.value })}
-                className="w-full px-4 py-3 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
-              />
-            </div>
-            <div>
-              <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Email</label>
-              <input
-                type="text"
-                value={session?.user?.email || ''}
-                readOnly
-                className="w-full px-4 py-3 border border-cream-dark bg-cream text-sm text-slate"
-              />
-            </div>
-            <div>
-              <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Timezone</label>
-              <select
-                value={profile.timezone}
-                onChange={(e) => setProfile({ ...profile, timezone: e.target.value })}
-                className="w-full px-4 py-3 border border-cream-dark bg-white text-sm text-charcoal focus:outline-none focus:border-gold"
-              >
-                <option value="ET">Eastern Time (ET)</option>
-                <option value="CT">Central Time (CT)</option>
-                <option value="MT">Mountain Time (MT)</option>
-                <option value="PT">Pacific Time (PT)</option>
-              </select>
-            </div>
-            <button onClick={saveProfile} className="btn-primary text-sm">
-              {saved.profile ? 'Saved!' : 'Save Profile'}
-            </button>
-          </div>
-        </div>
-
-        {/* Integrations */}
-        <div className="bg-white border border-cream-dark p-6">
-          <h3 className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 mb-4">Integrations</h3>
-
-          {/* Resend */}
-          <div className="mb-6 pb-6 border-b border-cream-dark">
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-charcoal">Resend (Email)</span>
-              <span className={`inline-block px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase border ${
-                integrations.resendKey ? 'bg-green-50 text-green-700 border-green-200' : 'bg-cream text-charcoal/40 border-cream-dark'
-              }`}>
-                {integrations.resendKey ? 'Connected' : 'Not configured'}
-              </span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">API Key</label>
-                <input
-                  type="password"
-                  value={integrations.resendKey}
-                  onChange={(e) => setIntegrations({ ...integrations, resendKey: e.target.value })}
-                  placeholder="re_..."
-                  className="w-full px-4 py-3 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
-                />
-              </div>
-              <button onClick={() => saveIntegration('resend')} className="btn-navy text-sm">
-                {saved.resend ? 'Saved!' : 'Save'}
-              </button>
-            </div>
-          </div>
-
-          {/* Twilio */}
-          <div>
-            <div className="flex items-center justify-between mb-3">
-              <span className="text-sm font-semibold text-charcoal">Twilio (SMS)</span>
-              <span className={`inline-block px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase border ${
-                integrations.twilioSid ? 'bg-green-50 text-green-700 border-green-200' : 'bg-cream text-charcoal/40 border-cream-dark'
-              }`}>
-                {integrations.twilioSid ? 'Connected' : 'Not configured'}
-              </span>
-            </div>
-            <div className="space-y-3">
-              <div>
-                <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Account SID</label>
-                <input
-                  type="password"
-                  value={integrations.twilioSid}
-                  onChange={(e) => setIntegrations({ ...integrations, twilioSid: e.target.value })}
-                  className="w-full px-4 py-3 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
-                />
-              </div>
-              <div>
-                <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Auth Token</label>
-                <input
-                  type="password"
-                  value={integrations.twilioToken}
-                  onChange={(e) => setIntegrations({ ...integrations, twilioToken: e.target.value })}
-                  className="w-full px-4 py-3 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
-                />
-              </div>
-              <div>
-                <label className="text-[0.7rem] font-semibold tracking-[0.1em] uppercase text-charcoal/40 block mb-1">Phone Number</label>
-                <input
-                  type="text"
-                  value={integrations.twilioPhone}
-                  onChange={(e) => setIntegrations({ ...integrations, twilioPhone: e.target.value })}
-                  placeholder="+1234567890"
-                  className="w-full px-4 py-3 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
-                />
-              </div>
-              <button onClick={() => saveIntegration('twilio')} className="btn-navy text-sm">
-                {saved.twilio ? 'Saved!' : 'Save'}
-              </button>
-            </div>
-          </div>
         </div>
 
         {/* Data Management */}
