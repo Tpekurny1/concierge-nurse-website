@@ -8,32 +8,53 @@ export default function FeaturedPrograms() {
         {/* Top Split Row */}
         <div className="flex flex-col lg:flex-row w-full gap-4 lg:gap-8 h-auto lg:h-[650px]">
 
-          {/* Left Block - The Accelerator */}
-          <div
-            className="flex-1 relative bg-cover bg-center flex flex-col items-center justify-center p-12 min-h-[500px] max-md:hidden"
-            style={{ backgroundImage: 'url("https://i.imgur.com/gC6qRpI.jpeg")'}}
-          >
-            <div className="absolute inset-0 bg-navy/60 z-0"></div>
+          {/* Left Block - The Accelerator (typography-forward, no photo) */}
+          <div className="flex-1 relative bg-navy flex flex-col items-center justify-center p-12 min-h-[500px] max-md:hidden border border-gold/20">
+            {/* Gold corner ornaments */}
+            <div className="absolute top-4 left-4 w-8 h-8 border-t border-l border-gold/50" />
+            <div className="absolute top-4 right-4 w-8 h-8 border-t border-r border-gold/50" />
+            <div className="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-gold/50" />
+            <div className="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold/50" />
+
+            {/* Faint oversized number */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+              <span className="font-heading text-[16rem] lg:text-[22rem] text-white/[0.04] leading-none tracking-tighter">
+                06
+              </span>
+            </div>
+
             <div className="relative z-10 flex flex-col items-center text-center max-w-sm">
-               <h3 className="avery-title text-4xl lg:text-5xl text-white mb-6 uppercase tracking-wider drop-shadow-md">
-                 THE ACCELERATOR
-               </h3>
-               <p className="font-body text-white/80 text-xs lg:text-[0.85rem] leading-relaxed mb-10 drop-shadow">
-                 A six-week live cohort where you build your entire concierge nursing business from the ground up. Not a course. Not theory. Real business, built step by step.
-               </p>
-               <Link to="/accelerator" className="btn-white text-white border-white bg-transparent hover:bg-white hover:text-navy hover:border-white text-[0.65rem] px-8 tracking-[0.2em]">
-                 JOIN THE WAITLIST
-               </Link>
+              <p className="font-body text-gold text-[0.6rem] tracking-[0.3em] uppercase mb-4">
+                Flagship · Six Weeks · Live
+              </p>
+              <h3 className="avery-title text-4xl lg:text-5xl text-white mb-5 uppercase tracking-wider drop-shadow-md">
+                THE ACCELERATOR
+              </h3>
+              <div className="gold-divider mx-auto mb-6" />
+              <p className="font-body text-white/80 text-xs lg:text-[0.85rem] leading-relaxed mb-10 drop-shadow">
+                A six-week live cohort where you build your entire concierge nursing business from the ground up. Not a course. Not theory. Real business, built step by step.
+              </p>
+              <Link to="/accelerator" className="btn-white text-white border-white bg-transparent hover:bg-white hover:text-navy hover:border-white text-[0.65rem] px-8 tracking-[0.2em]">
+                JOIN THE WAITLIST
+              </Link>
             </div>
           </div>
 
-          {/* Mobile — Accelerator (hero style) */}
-          <div className="md:hidden relative min-h-[75vh] flex flex-col">
-            <div
-              className="absolute inset-0 bg-cover"
-              style={{ backgroundImage: 'url("https://i.imgur.com/gC6qRpI.jpeg")', backgroundPosition: 'center 20%' }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/60 to-transparent" />
+          {/* Mobile — Accelerator (typography-forward, no photo) */}
+          <div className="md:hidden relative min-h-[75vh] flex flex-col bg-navy border border-gold/20">
+            {/* Gold corner ornaments */}
+            <div className="absolute top-4 left-4 w-7 h-7 border-t border-l border-gold/50" />
+            <div className="absolute top-4 right-4 w-7 h-7 border-t border-r border-gold/50" />
+            <div className="absolute bottom-4 left-4 w-7 h-7 border-b border-l border-gold/50" />
+            <div className="absolute bottom-4 right-4 w-7 h-7 border-b border-r border-gold/50" />
+
+            {/* Faint oversized number */}
+            <div className="absolute inset-0 flex items-center justify-center pointer-events-none select-none">
+              <span className="font-heading text-[14rem] text-white/[0.04] leading-none tracking-tighter">
+                06
+              </span>
+            </div>
+
             <div className="relative z-10 flex-grow flex flex-col justify-end px-6 pb-10">
               <p className="font-body text-gold text-[0.6rem] tracking-[0.25em] uppercase mb-4">
                 Flagship Cohort
@@ -41,6 +62,7 @@ export default function FeaturedPrograms() {
               <h3 className="font-heading font-normal text-[2.25rem] text-white mb-4 leading-[1.05] tracking-tight uppercase">
                 THE<br/>ACCELERATOR
               </h3>
+              <div className="gold-divider mb-5" />
               <p className="font-body text-white/75 text-[0.8rem] leading-relaxed mb-7 max-w-[280px]">
                 A six-week live cohort where you build your entire concierge nursing business from the ground up. Not a course. Not theory.
               </p>
