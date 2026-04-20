@@ -90,7 +90,7 @@ export default function Timeline() {
     <ResourceLayout
       title="Concierge Nursing Startup Timeline: Month by Month"
       description="A month-by-month timeline for launching your concierge nursing business. Know exactly what to focus on in months one through six to go from idea to first client."
-      canonical="https://www.conciergenursebusiness.com/resources/timeline"
+      canonical="https://www.conciergenursesociety.com/resources/timeline"
       schema={articleSchema}
       category="Getting Started"
       categorySlug="/resources"

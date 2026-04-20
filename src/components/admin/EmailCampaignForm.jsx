@@ -8,7 +8,7 @@ const DEFAULT_FORM = {
   name: '',
   subject: '',
   from_name: 'Concierge Nurse Business Society',
-  from_email: 'hello@conciergenursesociety.com',
+  from_email: 'info@conciergenursesociety.com',
   body: '',
 };
 

@@ -96,7 +96,7 @@ export default function HomeOfficeSetup() {
     <ResourceLayout
       title="How to Set Up a Home Office for Your Concierge Nursing Business"
       description="A complete guide to designing a professional, HIPAA-compliant home office that supports your concierge nursing practice and projects credibility to every client."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nursing-home-office-setup"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nursing-home-office-setup"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

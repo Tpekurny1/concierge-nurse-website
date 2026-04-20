@@ -110,8 +110,8 @@ export default function Contact() {
                 <p className="text-gold text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-3">
                   Email
                 </p>
-                <a href="mailto:hello@conciergenursebusiness.com" className="text-white/70 text-sm no-underline hover:text-gold transition-colors">
-                  hello@conciergenursebusiness.com
+                <a href="mailto:info@conciergenursesociety.com" className="text-white/70 text-sm no-underline hover:text-gold transition-colors">
+                  info@conciergenursesociety.com
                 </a>
               </div>
             </div>

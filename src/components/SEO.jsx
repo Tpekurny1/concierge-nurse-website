@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-const SITE_URL = 'https://www.conciergenursebusiness.com';
+const SITE_URL = 'https://www.conciergenursesociety.com';
 const SITE_NAME = 'Concierge Nurse Business Society';
 const DEFAULT_IMAGE = '/og-default.jpg';
 
@@ -12,7 +12,7 @@ export default function SEO({
   schema = null,
   image = DEFAULT_IMAGE,
 }) {
-  const url = `${SITE_URL}${canonical}`;
+  const url = canonical.startsWith('http') ? canonical : `${SITE_URL}${canonical}`;
   const imageUrl = image.startsWith('http') ? image : `${SITE_URL}${image}`;
 
   return (

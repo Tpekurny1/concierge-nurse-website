@@ -87,7 +87,7 @@ export default function LeaveBedside() {
     <ResourceLayout
       title="How to Leave Bedside Nursing and Start Your Own Business"
       description="A practical guide for nurses ready to transition from hospital bedside nursing to owning a concierge nursing business, including planning, finances, and first steps."
-      canonical="https://www.conciergenursebusiness.com/resources/career/leave-bedside-nursing-start-business"
+      canonical="https://www.conciergenursesociety.com/resources/career/leave-bedside-nursing-start-business"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

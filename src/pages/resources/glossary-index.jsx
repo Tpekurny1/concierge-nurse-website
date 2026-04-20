@@ -103,7 +103,7 @@ export default function GlossaryIndex() {
     <ResourceLayout
       title="Concierge Nursing Business Terms Glossary"
       description="A comprehensive A-Z glossary of terms related to concierge nursing businesses, including legal, financial, marketing, and clinical terminology."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary"
+      canonical="https://www.conciergenursesociety.com/resources/glossary"
       schema={articleSchema}
       category="Getting Started"
       categorySlug="/resources"

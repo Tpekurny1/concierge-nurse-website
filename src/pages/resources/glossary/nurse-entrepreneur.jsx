@@ -72,7 +72,7 @@ export default function NurseEntrepreneur() {
     <ResourceLayout
       title="What Is a Nurse Entrepreneur?"
       description="A nurse entrepreneur is a licensed nurse who owns and operates a business that leverages nursing expertise. Learn what nurse entrepreneurship looks like and how to get started."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-a-nurse-entrepreneur"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-a-nurse-entrepreneur"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

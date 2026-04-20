@@ -82,7 +82,7 @@ export default function BestSpecialties() {
     <ResourceLayout
       title="What Nursing Specialties Are Best for Concierge Nursing?"
       description="Discover which nursing specialties and clinical backgrounds translate best into a concierge nursing business, and how to leverage your experience in any specialty."
-      canonical="https://www.conciergenursebusiness.com/resources/career/best-nursing-specialties-concierge-nursing"
+      canonical="https://www.conciergenursesociety.com/resources/career/best-nursing-specialties-concierge-nursing"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

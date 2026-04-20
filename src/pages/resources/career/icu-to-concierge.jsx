@@ -82,7 +82,7 @@ export default function IcuToConcierge() {
     <ResourceLayout
       title="From ICU Nurse to Concierge Nurse: A Career Path Guide"
       description="How ICU and critical care nurses can leverage their advanced skills to build a successful concierge nursing business."
-      canonical="https://www.conciergenursebusiness.com/resources/career/icu-nurse-to-concierge-nurse"
+      canonical="https://www.conciergenursesociety.com/resources/career/icu-nurse-to-concierge-nurse"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

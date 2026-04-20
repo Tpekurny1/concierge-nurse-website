@@ -11,12 +11,16 @@ import Home from './pages/Home';
 import About from './pages/About';
 import StartHere from './pages/StartHere';
 import Accelerator from './pages/Accelerator';
+import Society from './pages/Society';
 import Toolkits from './pages/Toolkits';
 import Strategy from './pages/Strategy';
 import Consulting from './pages/Consulting';
 import Community from './pages/Community';
 import Contact from './pages/Contact';
 import Resources from './pages/Resources';
+import Terms from './pages/Terms';
+import Privacy from './pages/Privacy';
+import Disclaimer from './pages/Disclaimer';
 
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -335,12 +339,16 @@ export default function App() {
             <Route path="/about" element={<About />} />
             <Route path="/start-here" element={<StartHere />} />
             <Route path="/accelerator" element={<Accelerator />} />
+            <Route path="/society" element={<Society />} />
             <Route path="/toolkits" element={<Toolkits />} />
             <Route path="/strategy" element={<Strategy />} />
             <Route path="/consulting" element={<Consulting />} />
             <Route path="/community" element={<Community />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/disclaimer" element={<Disclaimer />} />
             {resourceRoutes.map(([path, Component]) => (
               <Route key={path} path={path} element={<Component />} />
             ))}

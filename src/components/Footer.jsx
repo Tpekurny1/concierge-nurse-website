@@ -41,6 +41,7 @@ export default function Footer() {
                 { label: 'About', path: '/about' },
                 { label: 'Start Here', path: '/start-here' },
                 { label: 'Accelerator', path: '/accelerator' },
+                { label: 'Society', path: '/society' },
                 { label: 'Toolkits', path: '/toolkits' },
                 { label: 'Strategy', path: '/strategy' },
                 { label: 'Consulting', path: '/consulting' },
@@ -154,13 +155,16 @@ export default function Footer() {
           <p className="text-white/30 text-[0.65rem] uppercase tracking-widest">
             &copy; {new Date().getFullYear()} Concierge Nurse
           </p>
-          <div className="flex gap-6">
-            <a href="#" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
+          <div className="flex flex-wrap justify-center gap-6">
+            <Link to="/privacy" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
               Privacy Policy
-            </a>
-            <a href="#" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
+            </Link>
+            <Link to="/terms" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
               Terms
-            </a>
+            </Link>
+            <Link to="/disclaimer" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
+              Disclaimer
+            </Link>
             <Link to="/admin/login" className="text-white/30 hover:text-white text-[0.65rem] uppercase tracking-widest transition-colors">
               Login
             </Link>

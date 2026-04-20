@@ -83,7 +83,7 @@ export default function BurnoutToBusiness() {
     <ResourceLayout
       title="Nurse Burnout to Business Owner: Making the Transition"
       description="How burned-out nurses can channel their frustration into building a concierge nursing business that restores purpose, autonomy, and satisfaction in their nursing career."
-      canonical="https://www.conciergenursebusiness.com/resources/career/nurse-burnout-to-business-owner"
+      canonical="https://www.conciergenursesociety.com/resources/career/nurse-burnout-to-business-owner"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

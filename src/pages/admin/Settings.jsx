@@ -7,7 +7,7 @@ const DEFAULT_BRAND_FORM = {
   logo_url: '',
   photo_url: '',
   from_name: 'Concierge Nurse Business Society',
-  from_email: 'hello@conciergenursesociety.com',
+  from_email: 'info@conciergenursesociety.com',
   brand_color: '#C9A84C',
   footer_text: 'Concierge Nurse Business Society',
   website_url: 'https://www.conciergenursesociety.com',

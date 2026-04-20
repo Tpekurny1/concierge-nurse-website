@@ -83,7 +83,7 @@ export default function OrthopedicSurgeons() {
     <ResourceLayout
       title="How to Partner with Orthopedic Surgeons as a Concierge Nurse"
       description="Build referral relationships with orthopedic surgeons by providing post-surgical recovery support, wound care, and rehabilitation coordination through your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-orthopedic-surgeons"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-orthopedic-surgeons"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

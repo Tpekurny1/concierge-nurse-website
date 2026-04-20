@@ -40,7 +40,7 @@ export default function ToolsSoftware() {
     <ResourceLayout
       title="Tools and Software Every Concierge Nurse Needs"
       description="A comprehensive guide to the technology stack for running an efficient, compliant, and professional concierge nursing practice from day one."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nursing-tools-software"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nursing-tools-software"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

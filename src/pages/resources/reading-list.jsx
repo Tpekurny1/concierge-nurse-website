@@ -89,7 +89,7 @@ export default function ReadingList() {
     <ResourceLayout
       title="Recommended Reading for Concierge Nurse Entrepreneurs"
       description="Curated reading list for nurses building concierge nursing businesses. Books on entrepreneurship, marketing, mindset, healthcare business, and personal development."
-      canonical="https://www.conciergenursebusiness.com/resources/reading-list"
+      canonical="https://www.conciergenursesociety.com/resources/reading-list"
       schema={articleSchema}
       category="Getting Started"
       categorySlug="/resources"

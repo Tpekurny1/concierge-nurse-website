@@ -96,7 +96,7 @@ export default function ClientOnboarding() {
     <ResourceLayout
       title="Concierge Nursing Client Onboarding: Step-by-Step Process"
       description="A detailed walkthrough of the client onboarding process for concierge nurses, from initial inquiry to a fully established care relationship within the first 30 days."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nursing-client-onboarding"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nursing-client-onboarding"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

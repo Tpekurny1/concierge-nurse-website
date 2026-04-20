@@ -83,7 +83,7 @@ export default function ConciergeMedicine() {
     <ResourceLayout
       title="How to Partner with Concierge Medicine Practices as a Concierge Nurse"
       description="Build referral relationships with concierge medicine physicians to serve their premium patients with personalized nursing care, health monitoring, and wellness services."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-concierge-medicine-practices"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-concierge-medicine-practices"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

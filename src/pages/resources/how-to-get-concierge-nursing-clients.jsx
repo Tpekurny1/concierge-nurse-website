@@ -67,7 +67,7 @@ export default function HowToGetConciergeNursingClients() {
     <ResourceLayout
       title="How to Get Your First Concierge Nursing Clients: A Step-by-Step Plan"
       description="Learn proven strategies to get your first concierge nursing clients. Covers physician referrals, networking, social media marketing, Google Business Profile, and building a client acquisition system."
-      canonical="https://www.conciergenursebusiness.com/resources/how-to-get-concierge-nursing-clients"
+      canonical="https://www.conciergenursesociety.com/resources/how-to-get-concierge-nursing-clients"
       category="Marketing"
       categorySlug="/resources"
       lastUpdated="April 2026"

@@ -82,7 +82,7 @@ export default function VsFranchise() {
     <ResourceLayout
       title="Starting a Nursing Business vs. Buying a Franchise"
       description="Comparing the pros and cons of starting an independent concierge nursing business versus buying a nursing franchise, including costs, autonomy, and long-term potential."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/start-nursing-business-vs-franchise"
+      canonical="https://www.conciergenursesociety.com/resources/compare/start-nursing-business-vs-franchise"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

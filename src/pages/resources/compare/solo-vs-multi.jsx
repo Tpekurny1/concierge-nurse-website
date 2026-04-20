@@ -82,7 +82,7 @@ export default function SoloVsMulti() {
     <ResourceLayout
       title="Solo Concierge Nurse vs. Multi-Nurse Practice: Pros and Cons"
       description="Comparing the solo concierge nursing model to building a multi-nurse practice, including income potential, lifestyle impact, management complexity, and when to scale."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/solo-concierge-nurse-vs-multi-nurse-practice"
+      canonical="https://www.conciergenursesociety.com/resources/compare/solo-concierge-nurse-vs-multi-nurse-practice"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

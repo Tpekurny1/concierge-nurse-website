@@ -76,7 +76,7 @@ export default function PrivatePayNursing() {
     <ResourceLayout
       title="What Is Private-Pay Nursing?"
       description="Private-pay nursing is a model where clients pay a nurse directly for healthcare services without insurance billing. Learn how it works and how it relates to concierge nursing."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-private-pay-nursing"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-private-pay-nursing"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

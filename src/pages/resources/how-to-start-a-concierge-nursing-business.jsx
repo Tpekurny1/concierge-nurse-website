@@ -133,7 +133,7 @@ export default function HowToStartAConciergeNursingBusiness() {
     <ResourceLayout
       title="How to Start a Concierge Nursing Business: Complete Step-by-Step Guide"
       description="Learn how to start a concierge nursing business step by step. Covers choosing your niche, forming your LLC or PLLC, HIPAA compliance, setting rates, getting clients, and launching your practice."
-      canonical="https://www.conciergenursebusiness.com/resources/how-to-start-a-concierge-nursing-business"
+      canonical="https://www.conciergenursesociety.com/resources/how-to-start-a-concierge-nursing-business"
       schema={[articleSchema, howToSchema]}
       category="Getting Started"
       categorySlug="/resources"

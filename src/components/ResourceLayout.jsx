@@ -73,9 +73,9 @@ export default function ResourceLayout({
     "@context": "https://schema.org",
     "@type": "BreadcrumbList",
     "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.conciergenursebusiness.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Resources", "item": "https://www.conciergenursebusiness.com/resources" },
-      ...(category ? [{ "@type": "ListItem", "position": 3, "name": category, "item": `https://www.conciergenursebusiness.com${categorySlug}` }] : []),
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://www.conciergenursesociety.com/" },
+      { "@type": "ListItem", "position": 2, "name": "Resources", "item": "https://www.conciergenursesociety.com/resources" },
+      ...(category ? [{ "@type": "ListItem", "position": 3, "name": category, "item": `https://www.conciergenursesociety.com${categorySlug}` }] : []),
       { "@type": "ListItem", "position": category ? 4 : 3, "name": title }
     ]
   };

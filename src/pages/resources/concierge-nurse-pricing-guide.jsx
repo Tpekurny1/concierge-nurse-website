@@ -73,7 +73,7 @@ export default function ConciergeNursePricingGuide() {
     <ResourceLayout
       title="How Much Do Concierge Nurses Charge? Pricing Guide"
       description="Learn how concierge nurses set their rates. Covers hourly pricing, package pricing, retainer models, rates by niche and geography, and how to price your concierge nursing services for profitability."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nurse-pricing-guide"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nurse-pricing-guide"
       category="Financial"
       categorySlug="/resources"
       lastUpdated="April 2026"

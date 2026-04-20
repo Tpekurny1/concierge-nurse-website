@@ -109,7 +109,7 @@ export default function HipaaComplianceForConciergeNurses() {
     <ResourceLayout
       title="HIPAA Compliance for Concierge Nurses: What You Need to Know"
       description="Do concierge nurses need to follow HIPAA? Learn when HIPAA applies to concierge nursing businesses, what compliance requires, and how to set up HIPAA-compliant systems for your private-pay nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/hipaa-compliance-for-concierge-nurses"
+      canonical="https://www.conciergenursesociety.com/resources/hipaa-compliance-for-concierge-nurses"
       schema={articleSchema}
       category="Legal & Compliance"
       categorySlug="/resources"

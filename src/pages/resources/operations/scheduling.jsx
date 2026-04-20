@@ -39,7 +39,7 @@ export default function Scheduling() {
     <ResourceLayout
       title="How to Manage Scheduling as a Solo Concierge Nurse"
       description="Practical scheduling strategies for solo concierge nurses who need to balance client visits, administrative work, travel time, and personal boundaries without burning out."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nurse-scheduling"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nurse-scheduling"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

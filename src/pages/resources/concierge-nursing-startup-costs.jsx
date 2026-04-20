@@ -111,7 +111,7 @@ export default function ConciergeNursingStartupCosts() {
     <ResourceLayout
       title="Concierge Nurse Business Startup Costs: What You Will Actually Spend"
       description="How much does it cost to start a concierge nursing business? Detailed breakdown of startup costs including legal formation, insurance, supplies, marketing, technology, and ongoing monthly expenses."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nursing-startup-costs"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nursing-startup-costs"
       category="Planning"
       categorySlug="/resources"
       lastUpdated="April 2026"

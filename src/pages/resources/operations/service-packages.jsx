@@ -96,7 +96,7 @@ export default function ServicePackages() {
     <ResourceLayout
       title="How to Create Concierge Nursing Service Packages That Sell"
       description="Learn how to design, price, and present concierge nursing service packages that attract ideal clients and create predictable recurring revenue for your practice."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nursing-service-packages"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nursing-service-packages"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

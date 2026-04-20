@@ -73,7 +73,7 @@ export default function CashPayPractice() {
     <ResourceLayout
       title="What Is a Cash-Pay Nursing Practice?"
       description="A cash-pay nursing practice is a healthcare business where clients pay the nurse directly for services, without insurance billing. Learn how this model works and why most concierge nurses use it."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-a-cash-pay-nursing-practice"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-a-cash-pay-nursing-practice"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

@@ -9,7 +9,7 @@ const DEFAULT_META = {
   description: '',
   trigger_tag_id: '',
   from_name: 'Concierge Nurse Business Society',
-  from_email: 'hello@conciergenursesociety.com',
+  from_email: 'info@conciergenursesociety.com',
   status: 'draft',
 };
 

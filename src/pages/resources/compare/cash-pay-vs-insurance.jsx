@@ -82,7 +82,7 @@ export default function CashPayVsInsurance() {
     <ResourceLayout
       title="Cash-Pay Nursing Practice vs. Insurance-Based: Which Business Model?"
       description="A detailed comparison of cash-pay and insurance-based nursing business models, helping nurses choose the right payment structure for their concierge practice."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/cash-pay-nursing-vs-insurance-based"
+      canonical="https://www.conciergenursesociety.com/resources/compare/cash-pay-nursing-vs-insurance-based"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

@@ -64,7 +64,7 @@ export default function ConciergeVsPrivateDutyVsHomeHealth() {
     <ResourceLayout
       title="Concierge Nursing vs. Private Duty Nursing vs. Home Health: What Is the Difference?"
       description="Understand the differences between concierge nursing, private duty nursing, and home health nursing. Compare business models, pay structures, client types, regulations, and which is right for your career."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nursing-vs-private-duty-vs-home-health"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nursing-vs-private-duty-vs-home-health"
       category="Compare"
       categorySlug="/resources"
       lastUpdated="April 2026"

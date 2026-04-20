@@ -18,14 +18,14 @@ const homeSchema = [
     "name": "Concierge Nurse Business Society",
     "alternateName": "CNBS",
     "description": "Business coaching and education helping registered nurses build, launch, and scale independent concierge nursing businesses",
-    "url": "https://www.conciergenursebusiness.com",
+    "url": "https://www.conciergenursesociety.com",
     "founder": {
       "@type": "Person",
       "name": "Tracy Pekurny",
       "jobTitle": "Founder & Business Strategist",
       "description": "Registered nurse, entrepreneur, and business strategist who helps nurses build concierge nursing businesses"
     },
-    "email": "hello@conciergenursebusiness.com",
+    "email": "info@conciergenursesociety.com",
     "sameAs": []
   }
 ];

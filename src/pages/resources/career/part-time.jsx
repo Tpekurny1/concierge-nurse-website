@@ -87,7 +87,7 @@ export default function PartTime() {
     <ResourceLayout
       title="Can I Start a Concierge Nursing Business Part-Time?"
       description="Learn how to build a concierge nursing business on the side while keeping your full-time nursing job, including time management, legal considerations, and growth strategies."
-      canonical="https://www.conciergenursebusiness.com/resources/career/concierge-nursing-part-time"
+      canonical="https://www.conciergenursesociety.com/resources/career/concierge-nursing-part-time"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

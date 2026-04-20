@@ -95,7 +95,7 @@ export default function EhrEmrSystems() {
     <ResourceLayout
       title="Best EHR and EMR Systems for Concierge Nurses"
       description="A practical comparison of electronic health record systems suited for independent concierge nursing practices, from full-featured EHRs to lightweight documentation solutions."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/best-ehr-emr-concierge-nurses"
+      canonical="https://www.conciergenursesociety.com/resources/operations/best-ehr-emr-concierge-nurses"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

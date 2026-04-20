@@ -82,7 +82,7 @@ export default function HomeHealthAgencies() {
     <ResourceLayout
       title="How to Partner with Home Health Agencies as a Concierge Nurse"
       description="Build referral relationships with home health agencies to serve patients who need extended or supplemental nursing care beyond what insurance covers."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-home-health-agencies"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-home-health-agencies"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

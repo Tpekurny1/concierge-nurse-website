@@ -77,7 +77,7 @@ export default function ScopeOfPracticeDefinition() {
     <ResourceLayout
       title="What Does Scope of Practice Mean for Nurse Business Owners?"
       description="Scope of practice defines the legal boundaries of what nurses can do clinically. Learn how it applies to concierge nursing and nurse-owned businesses."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-scope-of-practice-nurse-business"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-scope-of-practice-nurse-business"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

@@ -73,7 +73,7 @@ export default function ConciergeNurseBusinessCoach() {
     <ResourceLayout
       title="What Is a Concierge Nurse Business Coach?"
       description="A concierge nurse business coach helps nurses build and grow concierge nursing practices through strategic guidance, accountability, and industry expertise. Learn what they do and whether you need one."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-a-concierge-nurse-business-coach"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-a-concierge-nurse-business-coach"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

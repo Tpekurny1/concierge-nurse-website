@@ -82,7 +82,7 @@ export default function VsAgency() {
     <ResourceLayout
       title="Concierge Nursing vs. Agency and Per Diem Nursing"
       description="A comparison of concierge nursing and agency or per diem nursing, including differences in pay, autonomy, client relationships, and business structure."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/concierge-nursing-vs-agency-per-diem"
+      canonical="https://www.conciergenursesociety.com/resources/compare/concierge-nursing-vs-agency-per-diem"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

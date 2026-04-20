@@ -82,7 +82,7 @@ export default function VsTravelNursing() {
     <ResourceLayout
       title="Concierge Nursing vs. Travel Nursing: Income and Lifestyle Comparison"
       description="A comprehensive comparison of concierge nursing and travel nursing, covering income potential, lifestyle factors, career sustainability, and how to choose between them."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/concierge-nursing-vs-travel-nursing"
+      canonical="https://www.conciergenursesociety.com/resources/compare/concierge-nursing-vs-travel-nursing"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

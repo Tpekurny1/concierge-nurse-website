@@ -88,7 +88,7 @@ const resourceSchema = {
   "@type": "CollectionPage",
   "name": "Concierge Nursing Business Resources",
   "description": "Free educational resources for nurses building concierge nursing businesses. Guides, templates, checklists, and more.",
-  "url": "https://www.conciergenursebusiness.com/resources",
+  "url": "https://www.conciergenursesociety.com/resources",
   "provider": { "@type": "Organization", "name": "Concierge Nurse Business Society" }
 };
 

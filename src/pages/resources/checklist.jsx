@@ -89,7 +89,7 @@ export default function Checklist() {
     <ResourceLayout
       title="Concierge Nursing Business Startup Checklist"
       description="A comprehensive checklist of every step needed to launch your concierge nursing business, from choosing your niche to getting your first client."
-      canonical="https://www.conciergenursebusiness.com/resources/checklist"
+      canonical="https://www.conciergenursesociety.com/resources/checklist"
       schema={articleSchema}
       category="Getting Started"
       categorySlug="/resources"

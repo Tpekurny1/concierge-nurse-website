@@ -39,7 +39,7 @@ export default function Sops() {
     <ResourceLayout
       title="How to Build SOPs for Your Concierge Nursing Business"
       description="Learn how to create standard operating procedures that bring consistency, efficiency, and scalability to every aspect of your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nursing-sops"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nursing-sops"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

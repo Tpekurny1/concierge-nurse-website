@@ -95,7 +95,7 @@ export default function AfterHours() {
     <ResourceLayout
       title="How to Handle After-Hours Calls as a Concierge Nurse"
       description="Practical strategies for managing after-hours client communication, setting sustainable boundaries, and building policies that protect your well-being without compromising client trust."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nurse-after-hours-calls"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nurse-after-hours-calls"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

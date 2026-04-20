@@ -46,6 +46,7 @@ const navLinks = [
   { label: 'About', path: '/about' },
   { label: 'Start Here', path: '/start-here' },
   { label: 'Accelerator', path: '/accelerator' },
+  { label: 'Society', path: '/society' },
   { label: 'Toolkits', path: '/toolkits' },
   { label: 'Strategy', path: '/strategy' },
   { label: 'Consulting', path: '/consulting' },

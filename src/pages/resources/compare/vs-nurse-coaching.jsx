@@ -82,7 +82,7 @@ export default function VsNurseCoaching() {
     <ResourceLayout
       title="Concierge Nursing vs. Nurse Coaching: What Is the Difference?"
       description="A detailed comparison of concierge nursing and nurse coaching business models, including services, income potential, licensing requirements, and which is right for you."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/concierge-nursing-vs-nurse-coaching"
+      canonical="https://www.conciergenursesociety.com/resources/compare/concierge-nursing-vs-nurse-coaching"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

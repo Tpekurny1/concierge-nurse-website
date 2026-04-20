@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://www.conciergenursebusiness.com/sitemap.xml
+Sitemap: https://www.conciergenursesociety.com/sitemap.xml

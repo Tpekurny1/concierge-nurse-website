@@ -83,7 +83,7 @@ export default function Pediatricians() {
     <ResourceLayout
       title="How to Partner with Pediatricians as a Concierge Nurse"
       description="Build referral relationships with pediatricians by offering newborn care, family education, and pediatric health support through your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-pediatricians"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-pediatricians"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

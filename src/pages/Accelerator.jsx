@@ -19,7 +19,7 @@ const included = [
   { icon: Clock, label: 'Full interactive on-demand replays' },
   { icon: Star, label: 'Complete Business Toolkit included' },
   { icon: Award, label: 'Lifetime alumni status' },
-  { icon: Users, label: 'Invitation to post-graduation membership' },
+  { icon: Users, label: 'Invitation to the Concierge Nurse Business Society Membership' },
 ];
 
 export default function Accelerator() {
@@ -182,6 +182,49 @@ export default function Accelerator() {
             ))}
           </div>
           <p className="text-white/40 text-sm">Rated five stars by every cohort graduate</p>
+        </div>
+      </section>
+
+      {/* What happens after graduation — Society */}
+      <section className="py-24 bg-white">
+        <div className="max-w-5xl mx-auto px-6 lg:px-10">
+          <div className="grid md:grid-cols-5 gap-10 items-center">
+            <div className="md:col-span-3">
+              <p className="section-label mb-4">After You Graduate</p>
+              <h2 className="font-heading text-3xl sm:text-4xl font-bold text-navy mb-5">
+                Your Seat in the{' '}
+                <span className="text-gold-gradient">Society</span> Is Waiting
+              </h2>
+              <div className="gold-divider mb-6" />
+              <p className="text-charcoal text-[0.95rem] leading-relaxed mb-4">
+                Graduation is not the end. It is the moment your invitation
+                opens. The Concierge Nurse Business Society Membership is the
+                only ongoing room for Accelerator graduates — where you stay
+                connected, keep your momentum, and build alongside the nurses
+                who speak your language.
+              </p>
+              <p className="text-charcoal text-[0.95rem] leading-relaxed mb-6">
+                Founding member pricing is available in Week 6. That window
+                does not stay open.
+              </p>
+              <Link
+                to="/society"
+                className="btn-secondary inline-flex items-center justify-center gap-2"
+              >
+                See the Society <ArrowRight size={14} />
+              </Link>
+            </div>
+            <div className="md:col-span-2 bg-cream/50 border border-cream-dark p-8">
+              <p className="section-label mb-3">Inside the Society</p>
+              <ul className="space-y-3 text-slate text-sm">
+                <li className="flex gap-2"><CheckCircle2 size={14} className="text-gold flex-shrink-0 mt-0.5" /> Private community on Heartbeat</li>
+                <li className="flex gap-2"><CheckCircle2 size={14} className="text-gold flex-shrink-0 mt-0.5" /> Two monthly group coaching sessions</li>
+                <li className="flex gap-2"><CheckCircle2 size={14} className="text-gold flex-shrink-0 mt-0.5" /> Discounted HIPAA charting system</li>
+                <li className="flex gap-2"><CheckCircle2 size={14} className="text-gold flex-shrink-0 mt-0.5" /> Member directory &amp; cross-marketing</li>
+                <li className="flex gap-2"><CheckCircle2 size={14} className="text-gold flex-shrink-0 mt-0.5" /> Quarterly guest experts</li>
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 

@@ -82,7 +82,7 @@ export default function Dermatologists() {
     <ResourceLayout
       title="How to Partner with Dermatologists as a Concierge Nurse"
       description="Learn how to build referral relationships with dermatologists by providing post-procedure wound care, skin cancer recovery support, and cosmetic aftercare through your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-dermatologists"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-dermatologists"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

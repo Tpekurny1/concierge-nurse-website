@@ -87,7 +87,7 @@ export default function AfterFacelift() {
     <ResourceLayout
       title="What Does a Concierge Nurse Do After a Facelift?"
       description="Learn what concierge nurses do during facelift recovery: post-surgical monitoring, wound care, pain management, drain care, and patient education for optimal healing."
-      canonical="https://www.conciergenursebusiness.com/resources/services/concierge-nurse-after-facelift"
+      canonical="https://www.conciergenursesociety.com/resources/services/concierge-nurse-after-facelift"
       schema={articleSchema}
       category="Client Services"
       categorySlug="/resources"

@@ -83,7 +83,7 @@ export default function Geriatricians() {
     <ResourceLayout
       title="How to Partner with Geriatricians as a Concierge Nurse"
       description="Learn how to build referral relationships with geriatricians to serve elderly patients through your concierge nursing practice. Covers outreach, service design, and long-term partnership strategies."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-geriatricians"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-geriatricians"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

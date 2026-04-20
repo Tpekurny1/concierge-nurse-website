@@ -112,7 +112,7 @@ export default function ConciergeNursingFAQ() {
     <ResourceLayout
       title="Concierge Nursing Business FAQ: Everything You Need to Know"
       description="Answers to the most common questions about starting and running a concierge nursing business. Covers licensing, costs, income, HIPAA, legal structure, getting clients, and more."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nursing-faq"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nursing-faq"
       category="Getting Started"
       categorySlug="/resources"
       lastUpdated="April 2026"

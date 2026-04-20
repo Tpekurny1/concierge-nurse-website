@@ -39,7 +39,7 @@ export default function Hiring() {
     <ResourceLayout
       title="When to Hire: Scaling Your Concierge Nursing Team"
       description="A practical guide to recognizing when your concierge nursing practice needs help, deciding what to hire first, and building a team that extends your care without diluting your brand."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/when-to-hire-concierge-nursing"
+      canonical="https://www.conciergenursesociety.com/resources/operations/when-to-hire-concierge-nursing"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

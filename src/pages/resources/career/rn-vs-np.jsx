@@ -83,7 +83,7 @@ export default function RnVsNp() {
     <ResourceLayout
       title="RN vs. NP: Do You Need an Advanced Degree for Concierge Nursing?"
       description="Comparing what RNs and NPs can offer in a concierge nursing business, and whether pursuing an advanced degree is necessary for success in this model."
-      canonical="https://www.conciergenursebusiness.com/resources/career/concierge-nursing-rn-vs-np"
+      canonical="https://www.conciergenursesociety.com/resources/career/concierge-nursing-rn-vs-np"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

@@ -83,7 +83,7 @@ export default function OBGYNs() {
     <ResourceLayout
       title="How to Partner with OBGYNs as a Concierge Nurse"
       description="Build referral relationships with OBGYNs by offering postpartum support, newborn care, and maternal wellness services through your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-obgyns"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-obgyns"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

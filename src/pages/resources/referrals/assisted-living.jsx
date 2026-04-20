@@ -82,7 +82,7 @@ export default function AssistedLiving() {
     <ResourceLayout
       title="How to Partner with Assisted Living Facilities as a Concierge Nurse"
       description="Build referral relationships with assisted living facilities to provide supplemental nursing services, care advocacy, and family support for residents."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-assisted-living-facilities"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-assisted-living-facilities"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

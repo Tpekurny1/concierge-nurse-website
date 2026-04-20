@@ -82,7 +82,7 @@ export default function ErToConcierge() {
     <ResourceLayout
       title="From ER Nurse to Concierge Nurse: A Career Path Guide"
       description="How emergency department nurses can transition their rapid assessment skills, broad clinical knowledge, and triage expertise into a thriving concierge nursing business."
-      canonical="https://www.conciergenursebusiness.com/resources/career/er-nurse-to-concierge-nurse"
+      canonical="https://www.conciergenursesociety.com/resources/career/er-nurse-to-concierge-nurse"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

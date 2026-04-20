@@ -82,7 +82,7 @@ export default function MedsurgToConcierge() {
     <ResourceLayout
       title="From Med-Surg Nurse to Concierge Nurse: A Career Path Guide"
       description="How medical-surgical nurses can leverage their broad clinical skills and versatile experience to build a successful concierge nursing business."
-      canonical="https://www.conciergenursebusiness.com/resources/career/med-surg-nurse-to-concierge-nurse"
+      canonical="https://www.conciergenursesociety.com/resources/career/med-surg-nurse-to-concierge-nurse"
       schema={articleSchema}
       category="Career Transition"
       categorySlug="/resources/career"

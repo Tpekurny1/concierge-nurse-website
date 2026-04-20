@@ -73,7 +73,7 @@ export default function NurseOwnedBusiness() {
     <ResourceLayout
       title="What Is a Nurse-Owned Business?"
       description="A nurse-owned business is a company founded, owned, and operated by a licensed nurse. Learn about the types of nurse-owned businesses, legal structures, and how to start one."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-a-nurse-owned-business"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-a-nurse-owned-business"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

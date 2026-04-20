@@ -110,7 +110,7 @@ export default function WhatIsAConciergeNurse() {
     <ResourceLayout
       title="What Is a Concierge Nurse? The Definitive Guide"
       description="A concierge nurse provides private-pay, personalized nursing care outside traditional settings. Learn what concierge nurses do, who hires them, how they differ from home health and private duty nurses, and how to become one."
-      canonical="https://www.conciergenursebusiness.com/resources/what-is-a-concierge-nurse"
+      canonical="https://www.conciergenursesociety.com/resources/what-is-a-concierge-nurse"
       schema={articleSchema}
       category="Getting Started"
       categorySlug="/resources"

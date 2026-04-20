@@ -116,7 +116,7 @@ export default function ConciergeNurseBusinessPlan() {
     <ResourceLayout
       title="Concierge Nurse Business Plan: What to Include and How to Write One"
       description="Learn how to write a concierge nurse business plan. Covers executive summary, market analysis, services, pricing strategy, marketing plan, financial projections, and operations for your nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nurse-business-plan"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nurse-business-plan"
       category="Planning"
       categorySlug="/resources"
       lastUpdated="April 2026"

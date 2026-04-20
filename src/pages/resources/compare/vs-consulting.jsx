@@ -82,7 +82,7 @@ export default function VsConsulting() {
     <ResourceLayout
       title="Concierge Nursing vs. Nurse Consulting: What Is the Difference?"
       description="A comparison of concierge nursing and nurse consulting as business models, including differences in services, clients, income potential, and day-to-day work."
-      canonical="https://www.conciergenursebusiness.com/resources/compare/concierge-nursing-vs-nursing-consulting"
+      canonical="https://www.conciergenursesociety.com/resources/compare/concierge-nursing-vs-nursing-consulting"
       schema={articleSchema}
       category="Comparisons"
       categorySlug="/resources/compare"

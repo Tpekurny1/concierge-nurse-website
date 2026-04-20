@@ -73,7 +73,7 @@ export default function ConciergeMedicineVsNursing() {
     <ResourceLayout
       title="What Is the Difference Between Concierge Medicine and Concierge Nursing?"
       description="Concierge medicine is physician-led primary care with annual retainer fees. Concierge nursing is nurse-led private-pay care focused on support services. Learn the key differences."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/concierge-medicine-vs-concierge-nursing"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/concierge-medicine-vs-concierge-nursing"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

@@ -83,7 +83,7 @@ export default function PrimaryCare() {
     <ResourceLayout
       title="How to Partner with Primary Care Physicians as a Concierge Nurse"
       description="Build referral relationships with primary care physicians by offering chronic disease management, care coordination, and patient education through your concierge nursing practice."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-primary-care-physicians"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-primary-care-physicians"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"

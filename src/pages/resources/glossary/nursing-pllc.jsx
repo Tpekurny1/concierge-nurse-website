@@ -77,7 +77,7 @@ export default function NursingPllc() {
     <ResourceLayout
       title="What Is a Nursing PLLC?"
       description="A nursing PLLC (Professional Limited Liability Company) is a business entity designed for licensed professionals. Learn what it is, when you need one, and how it differs from a standard LLC."
-      canonical="https://www.conciergenursebusiness.com/resources/glossary/what-is-a-nursing-pllc"
+      canonical="https://www.conciergenursesociety.com/resources/glossary/what-is-a-nursing-pllc"
       schema={articleSchema}
       category="Glossary"
       categorySlug="/resources/glossary"

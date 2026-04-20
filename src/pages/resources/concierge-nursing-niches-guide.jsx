@@ -121,7 +121,7 @@ export default function ConciergeNursingNichesGuide() {
     <ResourceLayout
       title="Concierge Nursing Niches: Which One Is Right for You?"
       description="Explore the most popular concierge nursing niches including post-op recovery, postpartum care, geriatric care, executive health, IV therapy, and more. Compare startup costs, demand, and ideal background for each."
-      canonical="https://www.conciergenursebusiness.com/resources/concierge-nursing-niches"
+      canonical="https://www.conciergenursesociety.com/resources/concierge-nursing-niches"
       category="Niches"
       categorySlug="/resources"
       lastUpdated="April 2026"

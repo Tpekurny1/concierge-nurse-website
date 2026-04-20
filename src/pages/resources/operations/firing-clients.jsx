@@ -97,7 +97,7 @@ export default function FiringClients() {
     <ResourceLayout
       title="How to Fire a Client: Setting Boundaries in Concierge Nursing"
       description="A professional framework for ending client relationships that are no longer working, including when to fire, how to have the conversation, and how to protect yourself legally and emotionally."
-      canonical="https://www.conciergenursebusiness.com/resources/operations/concierge-nurse-fire-client"
+      canonical="https://www.conciergenursesociety.com/resources/operations/concierge-nurse-fire-client"
       category="Operations"
       categorySlug="/resources"
       headings={headings}

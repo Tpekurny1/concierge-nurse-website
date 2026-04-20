@@ -88,7 +88,7 @@ export default function PlasticSurgeons() {
     <ResourceLayout
       title="How to Partner with Plastic Surgeons as a Concierge Nurse"
       description="Learn how to build referral relationships with plastic surgeons for your concierge nursing business. Covers outreach strategies, service alignment, and maintaining long-term partnerships."
-      canonical="https://www.conciergenursebusiness.com/resources/referrals/partner-with-plastic-surgeons"
+      canonical="https://www.conciergenursesociety.com/resources/referrals/partner-with-plastic-surgeons"
       schema={articleSchema}
       category="Referral Sources"
       categorySlug="/resources"
