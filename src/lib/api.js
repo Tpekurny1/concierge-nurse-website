@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { scoreLead, mergeScoring } from './leadScoring';
 
 // ── Shared helpers ──────────────────────────────────────────
 
@@ -9,6 +10,28 @@ function getUTMParams() {
     utm_medium: params.get('utm_medium') || null,
     utm_campaign: params.get('utm_campaign') || null,
   };
+}
+
+function getScoringContext() {
+  return {
+    pagePath: window.location.pathname,
+    utm_campaign: new URLSearchParams(window.location.search).get('utm_campaign') || null,
+  };
+}
+
+async function applyScoring(contactId, existing, scoring) {
+  const merged = existing
+    ? mergeScoring(existing, scoring)
+    : scoring;
+
+  await supabase
+    .from('contacts')
+    .update({
+      intent: merged.intent,
+      lead_score: merged.score,
+      score_reasons: merged.reasons,
+    })
+    .eq('id', contactId);
 }
 
 function getMetadata(source) {
@@ -211,6 +234,21 @@ export async function submitContactForm({ first_name, last_name, email, interest
   await assignPipeline(contactId, 'General');
   await enrollInSequences(contactId);
 
+  const merged = { ...(existing || {}), first_name, last_name, interest, lifecycle_stage: existing?.lifecycle_stage || 'Explorer' };
+  const scoring = scoreLead({
+    formType: 'contact',
+    interest,
+    lifecycle: merged.lifecycle_stage,
+    profile: {
+      hasBusinessName: Boolean(merged.business_name),
+      hasRevenue: Boolean(merged.annual_revenue),
+      hasPhone: Boolean(merged.phone),
+    },
+    message,
+    context: getScoringContext(),
+  });
+  await applyScoring(contactId, existing, scoring);
+
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
 
@@ -261,6 +299,19 @@ export async function submitConsultingInquiry({ full_name, email, business_name,
   await assignPipeline(contactId, 'Consulting');
   await enrollInSequences(contactId);
 
+  const scoring = scoreLead({
+    formType: 'consulting',
+    lifecycle: 'Established Owner',
+    profile: {
+      hasBusinessName: Boolean(business_name || existing?.business_name),
+      hasRevenue: Boolean(annual_revenue || existing?.annual_revenue),
+      hasPhone: Boolean(existing?.phone),
+    },
+    message: biggest_challenge,
+    context: getScoringContext(),
+  });
+  await applyScoring(contactId, existing, scoring);
+
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
 
@@ -306,6 +357,19 @@ export async function submitAcceleratorWaitlist({ full_name, email }) {
   await assignPipeline(contactId, 'Accelerator');
   await enrollInSequences(contactId);
 
+  const newLifecycle = shouldUpgradeLifecycle(existing?.lifecycle_stage, 'Builder') ? 'Builder' : (existing?.lifecycle_stage || 'Builder');
+  const scoring = scoreLead({
+    formType: 'accelerator',
+    lifecycle: newLifecycle,
+    profile: {
+      hasBusinessName: Boolean(existing?.business_name),
+      hasRevenue: Boolean(existing?.annual_revenue),
+      hasPhone: Boolean(existing?.phone),
+    },
+    context: getScoringContext(),
+  });
+  await applyScoring(contactId, existing, scoring);
+
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }
 
@@ -346,6 +410,18 @@ export async function submitSubscribe({ email, first_name, source }) {
   await logActivity(contactId, `Subscribed via ${source.replace(/_/g, ' ')}`, meta);
   await assignPipeline(contactId, 'General');
   await enrollInSequences(contactId);
+
+  const scoring = scoreLead({
+    formType: 'newsletter',
+    lifecycle: existing?.lifecycle_stage || 'Explorer',
+    profile: {
+      hasBusinessName: Boolean(existing?.business_name),
+      hasRevenue: Boolean(existing?.annual_revenue),
+      hasPhone: Boolean(existing?.phone),
+    },
+    context: getScoringContext(),
+  });
+  await applyScoring(contactId, existing, scoring);
 
   return { contact_id: contactId, status: existing ? 'updated' : 'created' };
 }

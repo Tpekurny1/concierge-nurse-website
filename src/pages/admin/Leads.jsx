@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Search, ChevronLeft, ChevronRight, Download, Trash2, Tag, X, ArrowUp, ArrowDown, ArrowUpDown, Upload } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { INTENTS, getIntentMeta, getTemperature } from '../../lib/leadScoring';
 
 const PAGE_SIZE = 25;
 
@@ -11,12 +12,14 @@ export default function Leads() {
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState('all');
+  const [intentFilter, setIntentFilter] = useState('all');
+  const [tempFilter, setTempFilter] = useState('all');
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState(new Set());
   const [exporting, setExporting] = useState(false);
   const [tags, setTags] = useState([]);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
-  const [sortCol, setSortCol] = useState('created_at');
+  const [sortCol, setSortCol] = useState('lead_score');
   const [sortAsc, setSortAsc] = useState(false);
 
   function handleSort(col) {
@@ -40,6 +43,12 @@ export default function Leads() {
       .order(sortCol, { ascending: sortAsc })
       .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
 
+    // When sorting by lead_score, add created_at as secondary sort so
+    // ties fall in a stable, newest-first order.
+    if (sortCol === 'lead_score') {
+      query = query.order('created_at', { ascending: false });
+    }
+
     if (search) {
       query = query.or(`email.ilike.%${search}%,first_name.ilike.%${search}%,last_name.ilike.%${search}%`);
     }
@@ -48,13 +57,25 @@ export default function Leads() {
       query = query.eq('lifecycle_stage', filter);
     }
 
+    if (intentFilter !== 'all') {
+      query = query.eq('intent', intentFilter);
+    }
+
+    if (tempFilter === 'hot') {
+      query = query.gte('lead_score', 70);
+    } else if (tempFilter === 'warm') {
+      query = query.gte('lead_score', 40).lt('lead_score', 70);
+    } else if (tempFilter === 'cool') {
+      query = query.lt('lead_score', 40);
+    }
+
     const { data, count } = await query;
 
     setLeads(data || []);
     setTotal(count || 0);
     setLoading(false);
     hasLoaded.current = true;
-  }, [page, search, filter, sortCol, sortAsc]);
+  }, [page, search, filter, intentFilter, tempFilter, sortCol, sortAsc]);
 
   useEffect(() => {
     load();
@@ -102,7 +123,7 @@ export default function Leads() {
   }
 
   function downloadCSV(contacts, filename) {
-    const headers = ['first_name', 'last_name', 'email', 'phone', 'lifecycle_stage', 'status', 'source', 'business_name', 'annual_revenue', 'created_at'];
+    const headers = ['first_name', 'last_name', 'email', 'phone', 'intent', 'lead_score', 'lifecycle_stage', 'status', 'source', 'business_name', 'annual_revenue', 'created_at'];
     const csvRows = [headers.join(',')];
     contacts.forEach((c) => {
       csvRows.push(headers.map((h) => {
@@ -164,6 +185,26 @@ export default function Leads() {
             className="w-full pl-10 pr-4 py-2.5 border border-cream-dark bg-white text-sm focus:outline-none focus:border-gold transition-colors"
           />
         </div>
+        <select
+          value={intentFilter}
+          onChange={(e) => { setIntentFilter(e.target.value); setPage(0); }}
+          className="px-4 py-2.5 border border-cream-dark bg-white text-sm text-charcoal focus:outline-none focus:border-gold"
+        >
+          <option value="all">All Intents</option>
+          {Object.entries(INTENTS).map(([key, meta]) => (
+            <option key={key} value={key}>{meta.emoji} {meta.label}</option>
+          ))}
+        </select>
+        <select
+          value={tempFilter}
+          onChange={(e) => { setTempFilter(e.target.value); setPage(0); }}
+          className="px-4 py-2.5 border border-cream-dark bg-white text-sm text-charcoal focus:outline-none focus:border-gold"
+        >
+          <option value="all">All Temperatures</option>
+          <option value="hot">🔥 Hot (70+)</option>
+          <option value="warm">🟠 Warm (40–69)</option>
+          <option value="cool">🔵 Cool (&lt;40)</option>
+        </select>
         <select
           value={filter}
           onChange={(e) => { setFilter(e.target.value); setPage(0); }}
@@ -266,8 +307,9 @@ export default function Leads() {
                     {[
                       { key: 'first_name', label: 'Name' },
                       { key: 'email', label: 'Email' },
+                      { key: 'intent', label: 'Intent' },
+                      { key: 'lead_score', label: 'Score' },
                       { key: 'lifecycle_stage', label: 'Stage' },
-                      { key: 'source', label: 'Source' },
                       { key: 'created_at', label: 'Date' },
                     ].map((col) => (
                       <th
@@ -288,32 +330,48 @@ export default function Leads() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-cream-dark">
-                  {leads.map((lead) => (
-                    <tr key={lead.id} className={`hover:bg-cream/30 transition-colors ${selected.has(lead.id) ? 'bg-cream/50' : ''}`}>
-                      <td className="px-3 py-3">
-                        <input
-                          type="checkbox"
-                          checked={selected.has(lead.id)}
-                          onChange={() => toggleSelect(lead.id)}
-                          className="accent-gold"
-                        />
-                      </td>
-                      <td className="px-5 py-3">
-                        <Link to={`/admin/leads/${lead.id}`} className="text-navy font-semibold no-underline hover:text-gold">
-                          {lead.first_name || ''} {lead.last_name || ''}
-                          {!lead.first_name && !lead.last_name && <span className="text-slate italic">No name</span>}
-                        </Link>
-                      </td>
-                      <td className="px-5 py-3 text-slate">{lead.email}</td>
-                      <td className="px-5 py-3">
-                        <span className="inline-block px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase bg-cream text-charcoal/60 border border-cream-dark">
-                          {lead.lifecycle_stage || 'Explorer'}
-                        </span>
-                      </td>
-                      <td className="px-5 py-3 text-slate">{lead.source || '—'}</td>
-                      <td className="px-5 py-3 text-slate text-xs">{new Date(lead.created_at).toLocaleDateString()}</td>
-                    </tr>
-                  ))}
+                  {leads.map((lead) => {
+                    const intentMeta = getIntentMeta(lead.intent);
+                    const temp = getTemperature(lead.lead_score || 0);
+                    return (
+                      <tr key={lead.id} className={`hover:bg-cream/30 transition-colors ${selected.has(lead.id) ? 'bg-cream/50' : ''}`}>
+                        <td className="px-3 py-3">
+                          <input
+                            type="checkbox"
+                            checked={selected.has(lead.id)}
+                            onChange={() => toggleSelect(lead.id)}
+                            className="accent-gold"
+                          />
+                        </td>
+                        <td className="px-5 py-3">
+                          <Link to={`/admin/leads/${lead.id}`} className="text-navy font-semibold no-underline hover:text-gold">
+                            {lead.first_name || ''} {lead.last_name || ''}
+                            {!lead.first_name && !lead.last_name && <span className="text-slate italic">No name</span>}
+                          </Link>
+                        </td>
+                        <td className="px-5 py-3 text-slate">{lead.email}</td>
+                        <td className="px-5 py-3">
+                          <span className={`inline-flex items-center gap-1 px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase ${intentMeta.chipClass}`}>
+                            <span>{intentMeta.emoji}</span>
+                            <span>{intentMeta.shortLabel}</span>
+                          </span>
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase ${temp.chipClass}`}>
+                            <span className={`w-1.5 h-1.5 rounded-full ${temp.dotClass}`} />
+                            <span>{temp.label}</span>
+                            <span className="font-mono text-[0.6rem] opacity-70">{lead.lead_score || 0}</span>
+                          </span>
+                        </td>
+                        <td className="px-5 py-3">
+                          <span className="inline-block px-2 py-0.5 text-[0.6rem] font-semibold tracking-wider uppercase bg-cream text-charcoal/60 border border-cream-dark">
+                            {lead.lifecycle_stage || 'Explorer'}
+                          </span>
+                        </td>
+                        <td className="px-5 py-3 text-slate text-xs">{new Date(lead.created_at).toLocaleDateString()}</td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
             </div>

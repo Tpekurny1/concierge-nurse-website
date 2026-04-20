@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { ArrowLeft, Mail, Building2, DollarSign, Tag, Clock, FileText, Pencil, Phone } from 'lucide-react';
+import { ArrowLeft, Mail, Building2, DollarSign, Tag, Clock, FileText, Pencil, Phone, Flame, TrendingUp } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { getIntentMeta, getTemperature } from '../../lib/leadScoring';
 
 export default function LeadDetail() {
   const { id } = useParams();
@@ -101,7 +102,7 @@ export default function LeadDetail() {
       </Link>
 
       {/* Header */}
-      <div className="flex items-start justify-between mb-8">
+      <div className="flex items-start justify-between mb-6">
         <div>
           <h1 className="font-heading text-2xl font-bold text-navy">
             {contact.first_name || ''} {contact.last_name || ''}
@@ -120,6 +121,9 @@ export default function LeadDetail() {
           </span>
         </div>
       </div>
+
+      {/* Scoring summary card */}
+      <ScoringCard contact={contact} />
 
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Left column — Details */}
@@ -330,6 +334,89 @@ export default function LeadDetail() {
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+function ScoringCard({ contact }) {
+  const [showReasons, setShowReasons] = useState(false);
+  const intentMeta = getIntentMeta(contact.intent);
+  const temp = getTemperature(contact.lead_score || 0);
+  const reasons = Array.isArray(contact.score_reasons) ? contact.score_reasons : [];
+
+  return (
+    <div className="bg-white border border-cream-dark mb-8">
+      <div className="px-6 py-5 flex flex-col md:flex-row md:items-center gap-5">
+        {/* Intent */}
+        <div className="flex-1">
+          <p className="text-[0.65rem] uppercase tracking-[0.15em] text-charcoal/40 mb-2">Intent</p>
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold ${intentMeta.chipClass}`}>
+            <span>{intentMeta.emoji}</span>
+            <span>{intentMeta.label}</span>
+          </div>
+        </div>
+
+        {/* Temperature */}
+        <div className="flex-1">
+          <p className="text-[0.65rem] uppercase tracking-[0.15em] text-charcoal/40 mb-2 flex items-center gap-1.5">
+            <Flame size={11} className="text-gold" /> Temperature
+          </p>
+          <div className={`inline-flex items-center gap-2 px-3 py-1.5 text-sm font-semibold ${temp.chipClass}`}>
+            <span className={`w-2 h-2 rounded-full ${temp.dotClass}`} />
+            <span>{temp.label}</span>
+          </div>
+        </div>
+
+        {/* Score */}
+        <div className="flex-1">
+          <p className="text-[0.65rem] uppercase tracking-[0.15em] text-charcoal/40 mb-2 flex items-center gap-1.5">
+            <TrendingUp size={11} className="text-gold" /> Score
+          </p>
+          <div className="flex items-end gap-2">
+            <span className="font-heading text-3xl font-bold text-navy leading-none">
+              {contact.lead_score || 0}
+            </span>
+            <span className="text-slate text-xs mb-0.5">/ 100</span>
+          </div>
+        </div>
+
+        {/* Why this score toggle */}
+        <div className="md:border-l md:border-cream-dark md:pl-5">
+          <button
+            onClick={() => setShowReasons((s) => !s)}
+            className="text-[0.7rem] uppercase tracking-wider text-charcoal/60 hover:text-gold transition-colors"
+          >
+            {showReasons ? 'Hide' : 'Why this score?'}
+          </button>
+        </div>
+      </div>
+
+      {showReasons && (
+        <div className="border-t border-cream-dark px-6 py-5 bg-cream/30">
+          {reasons.length === 0 ? (
+            <p className="text-slate text-sm italic">
+              No scoring signals recorded yet. Score was backfilled or lead predates the scoring system.
+            </p>
+          ) : (
+            <div className="space-y-2">
+              {reasons.map((r, i) => (
+                <div key={i} className="flex items-center justify-between text-sm">
+                  <span className="text-charcoal/80">{r.signal}</span>
+                  <span className="font-mono font-semibold text-navy">
+                    +{r.points}
+                  </span>
+                </div>
+              ))}
+              <div className="flex items-center justify-between text-sm pt-3 mt-2 border-t border-cream-dark">
+                <span className="text-charcoal font-semibold">Total</span>
+                <span className="font-mono font-bold text-navy">
+                  {contact.lead_score || 0}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
