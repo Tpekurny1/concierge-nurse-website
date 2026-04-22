@@ -125,37 +125,42 @@ export default function BlogEditor() {
   }, [post.title, slugManuallyEdited]);
 
   // ── Save logic ──
-  const savePost = useCallback(async (showToast = false) => {
+  // `overrides` merges into post before building the payload, so callers
+  // (publish, schedule, unpublish) can set fresh values without waiting
+  // for React state to re-render.
+  const savePost = useCallback(async (overrides = {}) => {
     if (!editor) return;
 
     setSaving(true);
     setSaveError('');
 
+    const effective = { ...post, ...overrides };
+
     const contentJson = editor.getJSON();
     const contentHtml = generateHTML(contentJson, EDITOR_EXTENSIONS);
-    const excerpt = post.excerpt || deriveExcerpt(contentHtml);
+    const excerpt = effective.excerpt || deriveExcerpt(contentHtml);
     const readingTime = computeReadingTime(contentHtml);
 
     const payload = {
-      title: post.title || 'Untitled',
-      subtitle: post.subtitle || null,
-      slug: post.slug || slugify(post.title) || `draft-${Date.now()}`,
+      title: effective.title || 'Untitled',
+      subtitle: effective.subtitle || null,
+      slug: effective.slug || slugify(effective.title) || `draft-${Date.now()}`,
       excerpt,
-      cover_image_url: post.cover_image_url || null,
+      cover_image_url: effective.cover_image_url || null,
       content_json: contentJson,
       content_html: contentHtml,
-      status: post.status,
-      published_at: post.published_at,
-      scheduled_for: post.scheduled_for,
-      seo_title: post.seo_title || null,
-      seo_description: post.seo_description || null,
+      status: effective.status,
+      published_at: effective.published_at,
+      scheduled_for: effective.scheduled_for,
+      seo_title: effective.seo_title || null,
+      seo_description: effective.seo_description || null,
       reading_time_minutes: readingTime,
-      tags: post.tags || [],
-      use_default_signoff: post.use_default_signoff !== false,
-      signoff_closing_line: post.signoff_closing_line || null,
-      signoff_name: post.signoff_name || null,
-      signoff_title: post.signoff_title || null,
-      signoff_photo_url: post.signoff_photo_url || null,
+      tags: effective.tags || [],
+      use_default_signoff: effective.use_default_signoff !== false,
+      signoff_closing_line: effective.signoff_closing_line || null,
+      signoff_name: effective.signoff_name || null,
+      signoff_title: effective.signoff_title || null,
+      signoff_photo_url: effective.signoff_photo_url || null,
     };
 
     try {
@@ -212,7 +217,7 @@ export default function BlogEditor() {
     if (!editor || loading) return;
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
-      savePost(false);
+      savePost();
     }, 3000);
     return () => {
       if (saveTimer.current) clearTimeout(saveTimer.current);
@@ -237,18 +242,17 @@ export default function BlogEditor() {
   }
 
   async function handlePublish() {
-    const next = {
-      ...post,
+    const overrides = {
       status: 'published',
       published_at: post.published_at || new Date().toISOString(),
     };
-    setPost(next);
-    setTimeout(() => savePost(true), 50);
+    setPost((p) => ({ ...p, ...overrides }));
+    await savePost(overrides);
   }
 
   async function handleUnpublish() {
     setPost((p) => ({ ...p, status: 'draft' }));
-    setTimeout(() => savePost(true), 50);
+    await savePost({ status: 'draft' });
   }
 
   async function handleSchedule() {
@@ -257,7 +261,7 @@ export default function BlogEditor() {
       return;
     }
     setPost((p) => ({ ...p, status: 'scheduled' }));
-    setTimeout(() => savePost(true), 50);
+    await savePost({ status: 'scheduled' });
   }
 
   async function handleSendAsCampaign() {
@@ -362,7 +366,7 @@ ${post.subtitle ? `<p style="color:#555;font-size:16px;font-style:italic;margin:
               <Send size={14} /> {sendingCampaign ? 'Creating…' : 'Send as Campaign'}
             </button>
           )}
-          <button onClick={() => savePost(true)} className="btn-navy text-sm flex items-center gap-2">
+          <button onClick={() => savePost()} className="btn-navy text-sm flex items-center gap-2">
             <Save size={14} /> Save Draft
           </button>
           {post.status === 'published' ? (
