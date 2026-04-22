@@ -127,52 +127,63 @@ ALTER TABLE blog_post_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_comments ENABLE ROW LEVEL SECURITY;
 ALTER TABLE blog_settings ENABLE ROW LEVEL SECURITY;
 
--- Blog posts: public can read published ones; auth users can do anything
-DROP POLICY IF EXISTS "Public read published posts" ON blog_posts;
-CREATE POLICY "Public read published posts" ON blog_posts
-  FOR SELECT USING (status = 'published' AND (published_at IS NULL OR published_at <= NOW()));
+-- Policies — mirror the role-based syntax used elsewhere in the codebase.
+-- Public (anon) gets scoped read + the specific writes the public site needs;
+-- authenticated admins get full access.
 
-DROP POLICY IF EXISTS "Authenticated full access posts" ON blog_posts;
-CREATE POLICY "Authenticated full access posts" ON blog_posts
-  FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+-- blog_posts
+DROP POLICY IF EXISTS "Anon can read published posts" ON blog_posts;
+CREATE POLICY "Anon can read published posts" ON blog_posts
+  FOR SELECT TO anon
+  USING (status = 'published' AND (published_at IS NULL OR published_at <= NOW()));
 
--- Categories: public read; auth full access
-DROP POLICY IF EXISTS "Public read categories" ON blog_categories;
-CREATE POLICY "Public read categories" ON blog_categories
-  FOR SELECT USING (TRUE);
+DROP POLICY IF EXISTS "Auth full access posts" ON blog_posts;
+CREATE POLICY "Auth full access posts" ON blog_posts
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Authenticated full access categories" ON blog_categories;
-CREATE POLICY "Authenticated full access categories" ON blog_categories
-  FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+-- blog_categories
+DROP POLICY IF EXISTS "Anon can read categories" ON blog_categories;
+CREATE POLICY "Anon can read categories" ON blog_categories
+  FOR SELECT TO anon USING (true);
 
--- Post/Category join: public read; auth full access
-DROP POLICY IF EXISTS "Public read post categories" ON blog_post_categories;
-CREATE POLICY "Public read post categories" ON blog_post_categories
-  FOR SELECT USING (TRUE);
+DROP POLICY IF EXISTS "Auth full access categories" ON blog_categories;
+CREATE POLICY "Auth full access categories" ON blog_categories
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Authenticated full access post categories" ON blog_post_categories;
-CREATE POLICY "Authenticated full access post categories" ON blog_post_categories
-  FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+-- blog_post_categories
+DROP POLICY IF EXISTS "Anon can read post categories" ON blog_post_categories;
+CREATE POLICY "Anon can read post categories" ON blog_post_categories
+  FOR SELECT TO anon USING (true);
 
--- Comments: public can INSERT + read approved; auth full access
-DROP POLICY IF EXISTS "Public read approved comments" ON blog_comments;
-CREATE POLICY "Public read approved comments" ON blog_comments
-  FOR SELECT USING (status = 'approved');
+DROP POLICY IF EXISTS "Auth full access post categories" ON blog_post_categories;
+CREATE POLICY "Auth full access post categories" ON blog_post_categories
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Public insert comments" ON blog_comments;
-CREATE POLICY "Public insert comments" ON blog_comments
-  FOR INSERT WITH CHECK (TRUE);
+-- blog_comments
+DROP POLICY IF EXISTS "Anon can read approved comments" ON blog_comments;
+CREATE POLICY "Anon can read approved comments" ON blog_comments
+  FOR SELECT TO anon USING (status = 'approved');
 
-DROP POLICY IF EXISTS "Authenticated full access comments" ON blog_comments;
-CREATE POLICY "Authenticated full access comments" ON blog_comments
-  FOR ALL USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Anon can insert comments" ON blog_comments;
+CREATE POLICY "Anon can insert comments" ON blog_comments
+  FOR INSERT TO anon WITH CHECK (true);
 
--- Blog settings: public can read sign-off fields (needed for public render);
--- auth can read/write everything
-DROP POLICY IF EXISTS "Public read blog settings" ON blog_settings;
-CREATE POLICY "Public read blog settings" ON blog_settings
-  FOR SELECT USING (TRUE);
+-- Anon must be able to UPDATE the contact_id link on their just-inserted comment
+DROP POLICY IF EXISTS "Anon can link contact to own comment" ON blog_comments;
+CREATE POLICY "Anon can link contact to own comment" ON blog_comments
+  FOR UPDATE TO anon
+  USING (status = 'pending' OR status = 'approved')
+  WITH CHECK (true);
 
-DROP POLICY IF EXISTS "Authenticated write blog settings" ON blog_settings;
-CREATE POLICY "Authenticated write blog settings" ON blog_settings
-  FOR UPDATE USING (auth.role() = 'authenticated') WITH CHECK (auth.role() = 'authenticated');
+DROP POLICY IF EXISTS "Auth full access comments" ON blog_comments;
+CREATE POLICY "Auth full access comments" ON blog_comments
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
+
+-- blog_settings
+DROP POLICY IF EXISTS "Anon can read blog settings" ON blog_settings;
+CREATE POLICY "Anon can read blog settings" ON blog_settings
+  FOR SELECT TO anon USING (true);
+
+DROP POLICY IF EXISTS "Auth full access blog settings" ON blog_settings;
+CREATE POLICY "Auth full access blog settings" ON blog_settings
+  FOR ALL TO authenticated USING (true) WITH CHECK (true);
