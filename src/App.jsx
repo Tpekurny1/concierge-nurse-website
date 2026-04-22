@@ -22,6 +22,10 @@ import Terms from './pages/Terms';
 import Privacy from './pages/Privacy';
 import Disclaimer from './pages/Disclaimer';
 
+const Blog = lazy(() => import('./pages/Blog'));
+const BlogPost = lazy(() => import('./pages/BlogPost'));
+const BlogCategory = lazy(() => import('./pages/BlogCategory'));
+
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
 const AdminRegister = lazy(() => import('./pages/admin/Register'));
@@ -40,6 +44,10 @@ const AdminSequenceEditor = lazy(() => import('./pages/admin/SequenceEditor'));
 const AdminSequenceDetail = lazy(() => import('./pages/admin/SequenceDetail'));
 const AdminImport = lazy(() => import('./pages/admin/Import'));
 const AdminSettings = lazy(() => import('./pages/admin/Settings'));
+const AdminBlog = lazy(() => import('./pages/admin/Blog'));
+const AdminBlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
+const AdminBlogCategories = lazy(() => import('./pages/admin/BlogCategories'));
+const AdminBlogComments = lazy(() => import('./pages/admin/BlogComments'));
 
 const L = (p) => lazy(() => import(`./pages/resources/${p}.jsx`));
 const LN = (p) => lazy(() => import(`./pages/resources/niches/${p}.jsx`));
@@ -348,6 +356,9 @@ export default function App() {
             <Route path="/community" element={<Community />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/category/:slug" element={<BlogCategory />} />
+            <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
@@ -382,6 +393,11 @@ export default function App() {
             <Route path="sequences/:id" element={<AdminSequenceDetail />} />
             <Route path="sequences/:id/edit" element={<AdminSequenceEditor />} />
             <Route path="import" element={<AdminImport />} />
+            <Route path="blog" element={<AdminBlog />} />
+            <Route path="blog/new" element={<AdminBlogEditor />} />
+            <Route path="blog/categories" element={<AdminBlogCategories />} />
+            <Route path="blog/comments" element={<AdminBlogComments />} />
+            <Route path="blog/:id/edit" element={<AdminBlogEditor />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>

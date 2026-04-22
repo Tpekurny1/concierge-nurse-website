@@ -1,3 +1,4 @@
 User-agent: *
 Allow: /
 Sitemap: https://www.conciergenursesociety.com/sitemap.xml
+Sitemap: https://www.conciergenursesociety.com/blog-sitemap.xml

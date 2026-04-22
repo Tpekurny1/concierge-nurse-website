@@ -45,6 +45,7 @@ export default function Footer() {
                 { label: 'Toolkits', path: '/toolkits' },
                 { label: 'Strategy', path: '/strategy' },
                 { label: 'Consulting', path: '/consulting' },
+                { label: 'Blog', path: '/blog' },
                 { label: 'Community', path: '/community' },
                 { label: 'Contact', path: '/contact' },
               ].map((link) => (

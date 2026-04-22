@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { ChevronDown } from 'lucide-react';
 
 function HamburgerIcon({ isOpen, onClick }) {
   return (
@@ -42,20 +43,84 @@ function HamburgerIcon({ isOpen, onClick }) {
   );
 }
 
-const navLinks = [
+// Nav structure: 5 top-level items. Dropdowns group related destinations.
+const NAV = [
   { label: 'About', path: '/about' },
   { label: 'Start Here', path: '/start-here' },
-  { label: 'Accelerator', path: '/accelerator' },
-  { label: 'Society', path: '/society' },
-  { label: 'Toolkits', path: '/toolkits' },
-  { label: 'Strategy', path: '/strategy' },
-  { label: 'Consulting', path: '/consulting' },
-  { label: 'Community', path: '/community' },
-  { label: 'Resources', path: '/resources' },
+  {
+    label: 'Programs',
+    children: [
+      { label: 'Accelerator', path: '/accelerator', description: 'Six-week live cohort' },
+      { label: 'Society Membership', path: '/society', description: 'Exclusive to graduates' },
+    ],
+  },
+  {
+    label: 'Services',
+    children: [
+      { label: 'Clarity Consult', path: '/strategy', description: '60-minute strategy session' },
+      { label: 'Consulting', path: '/consulting', description: 'For six-to-seven-figure owners' },
+      { label: 'Toolkits', path: '/toolkits', description: 'Self-serve frameworks' },
+    ],
+  },
+  {
+    label: 'Learn',
+    children: [
+      { label: 'Blog', path: '/blog', description: 'Notes from the build' },
+      { label: 'Resources', path: '/resources', description: 'Guides and references' },
+      { label: 'Community', path: '/community', description: 'Free Facebook group' },
+    ],
+  },
 ];
+
+// Flatten for determining active state
+function isItemActive(item, pathname) {
+  if (item.path) return pathname === item.path;
+  return (item.children || []).some((c) => pathname.startsWith(c.path));
+}
+
+function DesktopDropdown({ item, pathname }) {
+  const [open, setOpen] = useState(false);
+  const active = isItemActive(item, pathname);
+  return (
+    <div
+      className="relative"
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      <button
+        className={`font-body text-[0.65rem] uppercase tracking-[0.18em] transition-colors flex items-center gap-1 py-3 ${
+          active ? 'text-gold' : 'text-white/60 hover:text-white'
+        }`}
+      >
+        {item.label}
+        <ChevronDown size={10} className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+
+      {open && (
+        <div className="absolute top-full left-1/2 -translate-x-1/2 mt-0 bg-navy border border-white/10 min-w-[260px] shadow-2xl">
+          {item.children.map((child) => (
+            <Link
+              key={child.path}
+              to={child.path}
+              className="block px-5 py-3.5 border-b border-white/5 last:border-none hover:bg-white/5 transition-colors no-underline"
+            >
+              <p className={`font-body text-[0.7rem] uppercase tracking-[0.2em] ${pathname.startsWith(child.path) ? 'text-gold' : 'text-white'}`}>
+                {child.label}
+              </p>
+              {child.description && (
+                <p className="text-white/40 text-[0.65rem] mt-0.5">{child.description}</p>
+              )}
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [openGroup, setOpenGroup] = useState(null);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
 
@@ -65,9 +130,7 @@ export default function Navbar() {
     } else {
       document.body.style.overflow = 'unset';
     }
-    return () => {
-      document.body.style.overflow = 'unset';
-    };
+    return () => { document.body.style.overflow = 'unset'; };
   }, [mobileOpen]);
 
   useEffect(() => {
@@ -82,13 +145,11 @@ export default function Navbar() {
       {/* Top Bar: Logo centered, CTA right */}
       <div className="hidden xl:block border-b border-white/10">
         <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
-          {/* Left: social */}
           <div className="flex gap-5 text-white/50 text-[0.6rem] uppercase tracking-[0.2em] font-body w-40">
             <span className="cursor-pointer hover:text-white transition-colors">Instagram</span>
             <span className="cursor-pointer hover:text-white transition-colors">Facebook</span>
           </div>
 
-          {/* Center: Logo */}
           <Link to="/" className="flex flex-col items-center leading-none text-center no-underline gap-1">
             <span className="avery-title text-3xl tracking-[0.12em] text-white">
               CONCIERGE NURSE
@@ -98,7 +159,6 @@ export default function Navbar() {
             </span>
           </Link>
 
-          {/* Right: CTA */}
           <div className="w-40 flex justify-end">
             <Link to="/contact" className="btn-white text-white border-white/40 hover:bg-white hover:text-navy hover:border-white" style={{ padding: '0.5rem 1.4rem', fontSize: '0.6rem' }}>
               CONTACT / BOOK
@@ -111,16 +171,20 @@ export default function Navbar() {
       <div className="hidden xl:block">
         <div className="max-w-[1400px] mx-auto px-8 h-[42px] flex items-center justify-center">
           <div className="flex items-center gap-10">
-            {navLinks.map((link) => (
-              <Link
-                key={link.path}
-                to={link.path}
-                className={`font-body text-[0.65rem] uppercase tracking-[0.18em] transition-colors ${
-                  location.pathname === link.path ? 'text-gold' : 'text-white/60 hover:text-white'
-                }`}
-              >
-                {link.label}
-              </Link>
+            {NAV.map((item) => (
+              item.children
+                ? <DesktopDropdown key={item.label} item={item} pathname={location.pathname} />
+                : (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`font-body text-[0.65rem] uppercase tracking-[0.18em] transition-colors py-3 ${
+                      location.pathname === item.path ? 'text-gold' : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                )
             ))}
           </div>
         </div>
@@ -157,33 +221,67 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="flex-1 overflow-y-auto flex flex-col items-center justify-center space-y-2 py-12">
-            {navLinks.map((link, index) => (
-              <div
-                key={link.path}
-                className="animate-link-slide"
-                style={{ animationDelay: `${index * 0.05 + 0.1}s` }}
-              >
-                <Link
-                  to={link.path}
-                  onClick={() => setMobileOpen(false)}
-                  className={`mobile-nav-link ${location.pathname === link.path ? 'active' : ''}`}
+          <div className="flex-1 overflow-y-auto py-8 px-6">
+            {NAV.map((item, index) => {
+              if (!item.children) {
+                return (
+                  <div
+                    key={item.path}
+                    className="animate-link-slide border-b border-white/5"
+                    style={{ animationDelay: `${index * 0.05 + 0.1}s` }}
+                  >
+                    <Link
+                      to={item.path}
+                      onClick={() => setMobileOpen(false)}
+                      className={`mobile-nav-link block py-4 ${location.pathname === item.path ? 'active' : ''}`}
+                    >
+                      {item.label}
+                    </Link>
+                  </div>
+                );
+              }
+              const isOpen = openGroup === item.label;
+              return (
+                <div
+                  key={item.label}
+                  className="animate-link-slide border-b border-white/5"
+                  style={{ animationDelay: `${index * 0.05 + 0.1}s` }}
                 >
-                  {link.label}
-                </Link>
-              </div>
-            ))}
+                  <button
+                    onClick={() => setOpenGroup(isOpen ? null : item.label)}
+                    className={`mobile-nav-link w-full flex items-center justify-between py-4 ${isItemActive(item, location.pathname) ? 'active' : ''}`}
+                  >
+                    <span>{item.label}</span>
+                    <ChevronDown size={14} className={`transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+                  </button>
+                  {isOpen && (
+                    <div className="pb-4 pl-4 space-y-1">
+                      {item.children.map((child) => (
+                        <Link
+                          key={child.path}
+                          to={child.path}
+                          onClick={() => setMobileOpen(false)}
+                          className={`block py-2.5 text-sm font-body uppercase tracking-[0.18em] no-underline ${
+                            location.pathname.startsWith(child.path) ? 'text-gold' : 'text-white/60 hover:text-white'
+                          }`}
+                        >
+                          {child.label}
+                          {child.description && (
+                            <span className="block text-[0.65rem] normal-case tracking-normal text-white/40 mt-0.5">
+                              {child.description}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
 
             <div
-              className="animate-link-slide pt-8 pb-4"
-              style={{ animationDelay: `${navLinks.length * 0.05 + 0.1}s` }}
-            >
-              <div className="w-8 h-[1px] bg-white/40 mx-auto" />
-            </div>
-
-            <div
-              className="animate-link-slide w-full px-12"
-              style={{ animationDelay: `${navLinks.length * 0.05 + 0.2}s` }}
+              className="animate-link-slide w-full mt-8"
+              style={{ animationDelay: `${NAV.length * 0.05 + 0.2}s` }}
             >
               <Link
                 to="/contact"
@@ -196,7 +294,7 @@ export default function Navbar() {
             </div>
           </div>
 
-          <div className="p-12 pb-16 flex flex-col items-center gap-6 animate-link-slide" style={{ animationDelay: `${navLinks.length * 0.05 + 0.3}s` }}>
+          <div className="p-12 pb-16 flex flex-col items-center gap-6 animate-link-slide" style={{ animationDelay: `${NAV.length * 0.05 + 0.3}s` }}>
             <div className="flex gap-8 text-white/60 text-[0.7rem] uppercase tracking-[0.3em] font-body">
               <span className="cursor-pointer hover:text-gold transition-colors">Instagram</span>
               <span className="cursor-pointer hover:text-gold transition-colors">Facebook</span>
