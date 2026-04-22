@@ -66,6 +66,7 @@ const NAV = [
     label: 'Learn',
     children: [
       { label: 'Blog', path: '/blog', description: 'Notes from the build' },
+      { label: 'Find a Nurse', path: '/directory', description: 'Concierge nurse directory' },
       { label: 'Resources', path: '/resources', description: 'Guides and references' },
       { label: 'Community', path: '/community', description: 'Free Facebook group' },
     ],

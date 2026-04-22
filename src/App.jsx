@@ -25,6 +25,7 @@ import Disclaimer from './pages/Disclaimer';
 const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogCategory = lazy(() => import('./pages/BlogCategory'));
+const Directory = lazy(() => import('./pages/Directory'));
 
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -48,6 +49,8 @@ const AdminBlog = lazy(() => import('./pages/admin/Blog'));
 const AdminBlogEditor = lazy(() => import('./pages/admin/BlogEditor'));
 const AdminBlogCategories = lazy(() => import('./pages/admin/BlogCategories'));
 const AdminBlogComments = lazy(() => import('./pages/admin/BlogComments'));
+const AdminDirectory = lazy(() => import('./pages/admin/Directory'));
+const AdminDirectoryMemberEditor = lazy(() => import('./pages/admin/DirectoryMemberEditor'));
 
 const L = (p) => lazy(() => import(`./pages/resources/${p}.jsx`));
 const LN = (p) => lazy(() => import(`./pages/resources/niches/${p}.jsx`));
@@ -359,6 +362,7 @@ export default function App() {
             <Route path="/blog" element={<Blog />} />
             <Route path="/blog/category/:slug" element={<BlogCategory />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
+            <Route path="/directory" element={<Directory />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
@@ -398,6 +402,9 @@ export default function App() {
             <Route path="blog/categories" element={<AdminBlogCategories />} />
             <Route path="blog/comments" element={<AdminBlogComments />} />
             <Route path="blog/:id/edit" element={<AdminBlogEditor />} />
+            <Route path="directory" element={<AdminDirectory />} />
+            <Route path="directory/new" element={<AdminDirectoryMemberEditor />} />
+            <Route path="directory/:id/edit" element={<AdminDirectoryMemberEditor />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>
