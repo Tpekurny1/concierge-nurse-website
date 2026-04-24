@@ -65,8 +65,8 @@ export default function TestimonialsSection() {
           {/* Left Column: Sticky Tracy Image */}
           <div className="hidden lg:block relative sticky top-32">
             <div
-              className="w-full aspect-[4/5] bg-contain bg-no-repeat bg-center max-w-lg shadow-2xl ml-auto"
-              style={{ backgroundImage: 'url("https://i.imgur.com/jxBFHqK.jpeg")', transform: 'scaleX(-1)' }}
+              className="w-full aspect-[4/5] bg-cover bg-center max-w-lg shadow-2xl ml-auto"
+              style={{ backgroundImage: 'url("https://i.imgur.com/jxBFHqK.jpeg")'}}
             />
           </div>
 
