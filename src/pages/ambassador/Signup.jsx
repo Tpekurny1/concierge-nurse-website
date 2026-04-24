@@ -46,10 +46,18 @@ export default function AmbassadorSignup() {
 
     // Stash signup fields on the auth user so the Portal can auto-create the
     // ambassador row after email confirmation — without re-asking for them.
+    // emailRedirectTo sends the user straight to the portal after confirming.
+    const redirectTo = typeof window !== 'undefined'
+      ? `${window.location.origin}/ambassador/portal`
+      : undefined;
+
     const { data: signUpData, error: signUpError } = await supabase.auth.signUp({
       email: emailLc,
       password: form.password,
-      options: { data: ambassadorProfile },
+      options: {
+        data: ambassadorProfile,
+        emailRedirectTo: redirectTo,
+      },
     });
 
     if (signUpError) {
