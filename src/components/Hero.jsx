@@ -10,7 +10,7 @@ export default function Hero() {
         {/* Desktop Layout Overlay */}
         <div 
           className="hidden md:flex relative w-full h-full min-h-[450px] items-center bg-cover border border-white/10"
-          style={{ backgroundImage: 'url("https://i.imgur.com/V5zt5SD.jpeg")', backgroundPosition: 'center 15%' }}
+          style={{ backgroundImage: 'url("https://i.imgur.com/jxBFHqK.jpeg")', backgroundPosition: 'center 15%' }}
         >
            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(10,22,40,0.7)_0%,rgba(10,22,40,0.1)_60%,transparent_100%)]"></div>
            
@@ -36,7 +36,7 @@ export default function Hero() {
           {/* Full-bleed background image */}
           <div
             className="absolute inset-0 bg-cover"
-            style={{ backgroundImage: 'url("https://i.imgur.com/V5zt5SD.jpeg")', backgroundPosition: '80% 15%' }}
+            style={{ backgroundImage: 'url("https://i.imgur.com/jxBFHqK.jpeg")', backgroundPosition: '80% 15%' }}
           />
           {/* Gradient overlay — fades from navy at top (seamless with navbar) and bottom (text legibility) */}
           <div className="absolute inset-0 bg-gradient-to-b from-navy via-transparent to-transparent" style={{ height: '30%' }} />
