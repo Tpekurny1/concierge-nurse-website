@@ -335,11 +335,10 @@ function DashboardTab({ ambassador, cycle, referrals, payouts, onGoto }) {
           <p className="text-gold text-[0.65rem] font-semibold tracking-[0.2em] uppercase mb-2">Your Referral Code</p>
           <div className="flex flex-wrap items-center justify-between gap-3">
             <p className="font-heading text-2xl font-bold text-navy tracking-wider">{ambassador.referral_code}</p>
-            <CopyInline text={ambassador.referral_code} />
+            <CopyInline text={buildEnrollmentLink(ambassador.referral_code)} label="Copy link" />
           </div>
-          <p className="text-charcoal/65 text-xs mt-3 leading-relaxed">
-            Tell the nurse to mention this code at enrollment. Or share your link:{' '}
-            <span className="text-navy font-mono">{buildEnrollmentLink(ambassador.referral_code)}</span>
+          <p className="text-charcoal/65 text-xs mt-3 leading-relaxed break-all">
+            Share this link with nurses — clicking <span className="text-navy font-mono">{buildEnrollmentLink(ambassador.referral_code)}</span> attributes the enrollment to you automatically.
           </p>
         </div>
       )}
