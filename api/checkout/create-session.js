@@ -1,12 +1,5 @@
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
+import { loadStripeConfig, serverSupabase } from '../_stripe-settings.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
@@ -31,17 +24,27 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Valid email is required.' });
     }
 
-    const priceId = plan === 'full'
-      ? process.env.STRIPE_PRICE_ID_ACCELERATOR_FULL
-      : process.env.STRIPE_PRICE_ID_ACCELERATOR_PAYMENT_PLAN;
+    const supabase = serverSupabase();
+    const config = await loadStripeConfig(supabase);
 
-    if (!priceId) {
-      return res.status(500).json({
-        error: 'Stripe price ID is not configured for this plan.',
+    if (!config.secret_key) {
+      return res.status(503).json({
+        error: 'Stripe is not connected yet. Ask the admin to finish setup at /admin/settings.',
       });
     }
 
-    // Resolve ambassador by referral code (if provided and still active).
+    const priceId = plan === 'full' ? config.price_full_id : config.price_plan_id;
+    if (!priceId) {
+      return res.status(503).json({
+        error: plan === 'full'
+          ? 'Pay-in-Full pricing is not configured yet.'
+          : 'Payment plan pricing is not configured yet.',
+      });
+    }
+
+    const stripe = new Stripe(config.secret_key);
+
+    // Resolve ambassador by referral code.
     let ambassador_id = null;
     let referral_code = null;
     if (ref) {
@@ -56,16 +59,14 @@ export default async function handler(req, res) {
       }
     }
 
-    // Resolve the active cohort cycle.
+    // Resolve active cohort cycle.
     const { data: cycle } = await supabase
       .from('cohort_cycles')
       .select('id, label')
       .eq('is_active', true)
       .maybeSingle();
 
-    // Try to match a pending referral by email (and cycle, if set).
-    // If an ambassador was pre-logged, we'll use their ambassador_id as the
-    // attribution source even if the nurse didn't click a coded link.
+    // Pre-match referral by email in active cycle.
     let referral_id = null;
     if (cycle) {
       const { data: pending } = await supabase
@@ -97,6 +98,7 @@ export default async function handler(req, res) {
       referral_id: referral_id || '',
       cohort_cycle_id: cycle?.id || '',
       cohort_cycle_label: cycle?.label || '',
+      plan_installments: config.price_plan_installments != null ? String(config.price_plan_installments) : '',
     };
 
     const sessionConfig = {
@@ -114,15 +116,11 @@ export default async function handler(req, res) {
       metadata,
     };
 
-    // Subscription mode also stores metadata on the subscription itself so we
-    // can attribute future invoice events without looking up the original
-    // session.
     if (plan === 'payment_plan') {
       sessionConfig.subscription_data = { metadata };
     }
 
     const session = await stripe.checkout.sessions.create(sessionConfig);
-
     return res.status(200).json({ url: session.url, session_id: session.id });
   } catch (err) {
     console.error('create-session error:', err);

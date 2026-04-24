@@ -1,13 +1,5 @@
 import Stripe from 'stripe';
-import { createClient } from '@supabase/supabase-js';
-
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET;
-
-const supabase = createClient(
-  process.env.VITE_SUPABASE_URL,
-  process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.VITE_SUPABASE_ANON_KEY
-);
+import { loadStripeConfig, serverSupabase } from '../_stripe-settings.js';
 
 // Vercel requires raw body for Stripe signature verification.
 export const config = {
@@ -23,21 +15,23 @@ async function readRawBody(req) {
 }
 
 export default async function handler(req, res) {
-  if (req.method !== 'POST') {
-    return res.status(405).end();
+  if (req.method !== 'POST') return res.status(405).end();
+
+  const supabase = serverSupabase();
+  const stripeConfig = await loadStripeConfig(supabase);
+
+  if (!stripeConfig.secret_key || !stripeConfig.webhook_secret) {
+    console.error('Stripe not fully configured — rejecting webhook.');
+    return res.status(503).json({ error: 'Stripe not configured' });
   }
 
-  if (!webhookSecret) {
-    console.error('STRIPE_WEBHOOK_SECRET is not set.');
-    return res.status(500).json({ error: 'Webhook not configured' });
-  }
-
+  const stripe = new Stripe(stripeConfig.secret_key);
   const rawBody = await readRawBody(req);
   const signature = req.headers['stripe-signature'];
 
   let event;
   try {
-    event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    event = stripe.webhooks.constructEvent(rawBody, signature, stripeConfig.webhook_secret);
   } catch (err) {
     console.error('Stripe signature verification failed:', err.message);
     return res.status(400).send(`Webhook Error: ${err.message}`);
@@ -46,22 +40,19 @@ export default async function handler(req, res) {
   try {
     switch (event.type) {
       case 'checkout.session.completed':
-        await handleCheckoutCompleted(event.data.object);
-        break;
-      case 'invoice.payment_succeeded':
-        await handleInvoicePaid(event.data.object);
-        break;
-      case 'charge.refunded':
-        await handleChargeRefunded(event.data.object);
-        break;
       case 'checkout.session.async_payment_succeeded':
-        await handleCheckoutCompleted(event.data.object);
+        await handleCheckoutCompleted(supabase, event.data.object);
         break;
       case 'checkout.session.async_payment_failed':
-        await markFailedSession(event.data.object);
+        await markFailedSession(supabase, event.data.object);
+        break;
+      case 'invoice.payment_succeeded':
+        await handleInvoicePaid(supabase, stripe, stripeConfig, event.data.object);
+        break;
+      case 'charge.refunded':
+        await handleChargeRefunded(supabase, event.data.object);
         break;
       default:
-        // Log unhandled types for observability; don't error.
         break;
     }
   } catch (err) {
@@ -72,7 +63,7 @@ export default async function handler(req, res) {
   return res.status(200).json({ received: true });
 }
 
-async function handleCheckoutCompleted(session) {
+async function handleCheckoutCompleted(supabase, session) {
   const meta = session.metadata || {};
   const customerDetails = session.customer_details || {};
 
@@ -108,7 +99,7 @@ async function handleCheckoutCompleted(session) {
     status: 'paid',
   };
 
-  // Try to link to an existing contact by email (for admin UX).
+  // Link to an existing contact by email (helps the admin UI).
   const { data: contact } = await supabase
     .from('contacts')
     .select('id')
@@ -116,7 +107,6 @@ async function handleCheckoutCompleted(session) {
     .maybeSingle();
   if (contact) payload.contact_id = contact.id;
 
-  // Idempotent upsert by stripe_checkout_session_id.
   const { data: existing } = await supabase
     .from('enrollments')
     .select('id, status')
@@ -124,7 +114,6 @@ async function handleCheckoutCompleted(session) {
     .maybeSingle();
 
   if (existing) {
-    // Preserve the referral_id if one was already matched.
     if (existing.status === 'paid') return; // already processed
     await supabase.from('enrollments').update(payload).eq('id', existing.id);
   } else {
@@ -132,11 +121,8 @@ async function handleCheckoutCompleted(session) {
   }
 }
 
-async function handleInvoicePaid(invoice) {
-  // For subscription-based payment plans, log each installment on the
-  // existing enrollment. We do NOT re-trigger attribution — that already
-  // happened on the initial checkout.session.completed event.
-  if (!invoice.subscription) return;
+async function handleInvoicePaid(supabase, stripe, stripeConfig, invoice) {
+  if (!invoice.subscription) return; // ignore non-subscription invoices
 
   const { data: enroll } = await supabase
     .from('enrollments')
@@ -144,14 +130,32 @@ async function handleInvoicePaid(invoice) {
     .eq('stripe_subscription_id', invoice.subscription)
     .maybeSingle();
 
-  if (!enroll) return;
+  if (enroll) {
+    const note = `Installment paid: $${(invoice.amount_paid / 100).toFixed(2)} on ${new Date().toISOString().slice(0, 10)}`;
+    const combined = enroll.notes ? `${enroll.notes}\n${note}` : note;
+    await supabase.from('enrollments').update({ notes: combined }).eq('id', enroll.id);
+  }
 
-  const note = `Installment paid: $${(invoice.amount_paid / 100).toFixed(2)} on ${new Date().toISOString().slice(0, 10)}`;
-  const combined = enroll.notes ? `${enroll.notes}\n${note}` : note;
-  await supabase.from('enrollments').update({ notes: combined }).eq('id', enroll.id);
+  // Auto-cancel after N installments if the admin configured one.
+  const installments = stripeConfig.price_plan_installments;
+  if (installments && Number.isInteger(installments) && installments > 0) {
+    try {
+      // Count paid invoices on this subscription.
+      const invoices = await stripe.invoices.list({
+        subscription: invoice.subscription,
+        limit: installments + 5,
+      });
+      const paidCount = (invoices.data || []).filter((i) => i.status === 'paid').length;
+      if (paidCount >= installments) {
+        await stripe.subscriptions.update(invoice.subscription, { cancel_at_period_end: true });
+      }
+    } catch (err) {
+      console.warn('Could not schedule subscription auto-cancel:', err.message);
+    }
+  }
 }
 
-async function handleChargeRefunded(charge) {
+async function handleChargeRefunded(supabase, charge) {
   const { data: enroll } = await supabase
     .from('enrollments')
     .select('id, status')
@@ -161,13 +165,15 @@ async function handleChargeRefunded(charge) {
   if (!enroll) return;
   if (enroll.status === 'refunded') return;
 
-  // The enrollments_attribute_on_paid trigger handles unwinding the referral
-  // and cancelling any 'due' payouts when status flips to 'refunded'.
+  // The enrollments_attribute_on_paid trigger unwinds the referral and
+  // cancels any 'due' payouts when status flips to 'refunded'.
   await supabase.from('enrollments').update({ status: 'refunded' }).eq('id', enroll.id);
 }
 
-async function markFailedSession(session) {
-  await supabase.from('enrollments').update({ status: 'failed' })
+async function markFailedSession(supabase, session) {
+  await supabase
+    .from('enrollments')
+    .update({ status: 'failed' })
     .eq('stripe_checkout_session_id', session.id);
 }
 

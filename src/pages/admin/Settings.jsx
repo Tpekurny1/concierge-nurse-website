@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../../lib/supabase';
 import ImageUpload from '../../components/admin/ImageUpload';
+import StripeSettings from '../../components/admin/StripeSettings';
 
 const DEFAULT_BRAND_FORM = {
   business_name: 'Concierge Nurse Business Society',
@@ -485,6 +486,9 @@ export default function Settings() {
             </div>
           </div>
         )}
+
+        {/* Stripe */}
+        <StripeSettings />
 
         {/* Data Management */}
         <div className="bg-white border border-cream-dark p-6">
