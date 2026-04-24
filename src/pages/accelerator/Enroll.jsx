@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
 import { Star, Check, Lock, ArrowRight, Shield, CalendarClock } from 'lucide-react';
 import SEO from '../../components/SEO';
+import StandaloneHeader from '../../components/StandaloneHeader';
 import { supabase } from '../../lib/supabase';
 
 export default function AcceleratorEnroll() {
@@ -74,7 +75,8 @@ export default function AcceleratorEnroll() {
         canonical="/accelerator/enroll"
       />
 
-      <section className="bg-navy pt-24 pb-16 px-6 min-h-screen">
+      <section className="bg-navy pt-24 pb-16 px-6 min-h-screen relative">
+        <StandaloneHeader />
         <div className="max-w-3xl mx-auto">
           <div className="text-center mb-10">
             <div className="w-14 h-14 rounded-full bg-gold flex items-center justify-center mx-auto mb-5 shadow-lg">

@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { Star, ArrowRight, Mail, Lock } from 'lucide-react';
 import SEO from '../../components/SEO';
+import StandaloneHeader from '../../components/StandaloneHeader';
 
 export default function AmbassadorLogin() {
   const navigate = useNavigate();
@@ -47,7 +48,8 @@ export default function AmbassadorLogin() {
   return (
     <>
       <SEO title="Ambassador Sign In — Concierge Nurse Business Society" canonical="/ambassador/login" />
-      <section className="min-h-screen bg-navy flex items-center justify-center px-6 pt-24 pb-16">
+      <section className="min-h-screen bg-navy flex items-center justify-center px-6 pt-24 pb-16 relative">
+        <StandaloneHeader />
         <div className="max-w-md w-full">
           <div className="text-center mb-8">
             <div className="w-14 h-14 rounded-full bg-gold flex items-center justify-center mx-auto mb-5 shadow-lg">

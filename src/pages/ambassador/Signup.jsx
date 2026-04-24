@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
 import { Star, ArrowRight, CheckCircle2 } from 'lucide-react';
 import SEO from '../../components/SEO';
+import StandaloneHeader from '../../components/StandaloneHeader';
 
 export default function AmbassadorSignup() {
   const navigate = useNavigate();
@@ -127,7 +128,8 @@ export default function AmbassadorSignup() {
     return (
       <>
         <SEO title="Check Your Email — Ambassador Pathway" canonical="/ambassador/signup" />
-        <section className="min-h-screen bg-navy flex items-center justify-center px-6 pt-24 pb-16">
+        <section className="min-h-screen bg-navy flex items-center justify-center px-6 pt-24 pb-16 relative">
+          <StandaloneHeader />
           <div className="max-w-md w-full bg-white/[0.03] border border-white/10 rounded-2xl p-10 text-center">
             <div className="w-14 h-14 rounded-full bg-gold/15 flex items-center justify-center mx-auto mb-6">
               <CheckCircle2 size={26} className="text-gold" />
@@ -153,7 +155,8 @@ export default function AmbassadorSignup() {
         description="Sign up for the Ambassador Pathway. Earn up to $1,200 per cohort cycle by referring nurses to the Concierge Nurse Business Society Method Accelerator."
         canonical="/ambassador/signup"
       />
-      <section className="min-h-screen bg-navy pt-24 pb-16 px-6">
+      <section className="min-h-screen bg-navy pt-24 pb-16 px-6 relative">
+        <StandaloneHeader />
         <div className="max-w-xl mx-auto">
           <div className="text-center mb-10">
             <div className="w-14 h-14 rounded-full bg-gold flex items-center justify-center mx-auto mb-5 shadow-lg">

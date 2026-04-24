@@ -1,6 +1,7 @@
 import { useSearchParams, Link } from 'react-router-dom';
 import { CheckCircle2, Mail, CalendarClock } from 'lucide-react';
 import SEO from '../../components/SEO';
+import StandaloneHeader from '../../components/StandaloneHeader';
 
 export default function AcceleratorThankYou() {
   const [searchParams] = useSearchParams();
@@ -13,7 +14,8 @@ export default function AcceleratorThankYou() {
         description="Your Method Accelerator enrollment is confirmed."
         canonical="/accelerator/thank-you"
       />
-      <section className="bg-navy min-h-screen flex items-center justify-center px-6 pt-20 pb-16">
+      <section className="bg-navy min-h-screen flex items-center justify-center px-6 pt-20 pb-16 relative">
+        <StandaloneHeader />
         <div className="max-w-xl w-full text-center">
           <div className="w-16 h-16 rounded-full bg-gold flex items-center justify-center mx-auto mb-6 shadow-lg">
             <CheckCircle2 size={28} className="text-navy" />
