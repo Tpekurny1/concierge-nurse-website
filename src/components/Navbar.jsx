@@ -52,6 +52,7 @@ const NAV = [
     children: [
       { label: 'Accelerator', path: '/accelerator', description: 'Six-week live cohort' },
       { label: 'Society Membership', path: '/society', description: 'Exclusive to graduates' },
+      { label: 'Ambassador Pathway', path: '/ambassador', description: 'For Accelerator graduates' },
     ],
   },
   {
@@ -146,7 +147,7 @@ export default function Navbar() {
       {/* Top Bar: Logo centered, CTA right */}
       <div className="hidden xl:block border-b border-white/10">
         <div className="max-w-[1400px] mx-auto px-8 h-[72px] flex items-center justify-between">
-          <div className="flex gap-5 text-white/50 text-[0.6rem] uppercase tracking-[0.2em] font-body w-40">
+          <div className="flex gap-5 text-white/50 text-[0.6rem] uppercase tracking-[0.2em] font-body w-48">
             <span className="cursor-pointer hover:text-white transition-colors">Instagram</span>
             <span className="cursor-pointer hover:text-white transition-colors">Facebook</span>
           </div>
@@ -160,7 +161,13 @@ export default function Navbar() {
             </span>
           </Link>
 
-          <div className="w-40 flex justify-end">
+          <div className="w-48 flex justify-end items-center gap-5">
+            <Link
+              to="/ambassador/login"
+              className="text-white/50 hover:text-gold text-[0.6rem] uppercase tracking-[0.2em] font-body no-underline transition-colors"
+            >
+              Ambassador Login
+            </Link>
             <Link to="/contact" className="btn-white text-white border-white/40 hover:bg-white hover:text-navy hover:border-white" style={{ padding: '0.5rem 1.4rem', fontSize: '0.6rem' }}>
               CONTACT / BOOK
             </Link>
@@ -281,7 +288,7 @@ export default function Navbar() {
             })}
 
             <div
-              className="animate-link-slide w-full mt-8"
+              className="animate-link-slide w-full mt-8 space-y-3"
               style={{ animationDelay: `${NAV.length * 0.05 + 0.2}s` }}
             >
               <Link
@@ -291,6 +298,13 @@ export default function Navbar() {
                 style={{ fontSize: '0.75rem', padding: '1rem' }}
               >
                 CONTACT / BOOK NOW
+              </Link>
+              <Link
+                to="/ambassador/login"
+                onClick={() => setMobileOpen(false)}
+                className="block text-center text-white/50 hover:text-gold text-[0.7rem] uppercase tracking-[0.2em] font-body no-underline transition-colors pt-2"
+              >
+                Ambassador Login
               </Link>
             </div>
           </div>

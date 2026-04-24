@@ -2,10 +2,9 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../lib/AuthContext';
 
 export default function ProtectedRoute({ children }) {
-  const session = useAuth();
+  const { session, isAdmin, loading } = useAuth();
 
-  // Still loading
-  if (session === undefined) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-cream">
         <p className="text-slate text-sm">Loading...</p>
@@ -15,6 +14,10 @@ export default function ProtectedRoute({ children }) {
 
   if (!session) {
     return <Navigate to="/admin/login" replace />;
+  }
+
+  if (!isAdmin) {
+    return <Navigate to="/ambassador" replace />;
   }
 
   return children;

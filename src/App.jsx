@@ -4,6 +4,7 @@ import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { AuthProvider } from './lib/AuthContext';
 import ProtectedRoute from './components/ProtectedRoute';
+import AmbassadorRoute from './components/AmbassadorRoute';
 import AdminLayout from './components/AdminLayout';
 import PageTracker from './components/PageTracker';
 
@@ -26,6 +27,10 @@ const Blog = lazy(() => import('./pages/Blog'));
 const BlogPost = lazy(() => import('./pages/BlogPost'));
 const BlogCategory = lazy(() => import('./pages/BlogCategory'));
 const Directory = lazy(() => import('./pages/Directory'));
+const Ambassador = lazy(() => import('./pages/Ambassador'));
+const AmbassadorSignup = lazy(() => import('./pages/ambassador/Signup'));
+const AmbassadorLogin = lazy(() => import('./pages/ambassador/Login'));
+const AmbassadorPortal = lazy(() => import('./pages/ambassador/Portal'));
 
 // Admin pages
 const AdminLogin = lazy(() => import('./pages/admin/Login'));
@@ -51,6 +56,9 @@ const AdminBlogCategories = lazy(() => import('./pages/admin/BlogCategories'));
 const AdminBlogComments = lazy(() => import('./pages/admin/BlogComments'));
 const AdminDirectory = lazy(() => import('./pages/admin/Directory'));
 const AdminDirectoryMemberEditor = lazy(() => import('./pages/admin/DirectoryMemberEditor'));
+const AdminAmbassadors = lazy(() => import('./pages/admin/Ambassadors'));
+const AdminReferrals = lazy(() => import('./pages/admin/Referrals'));
+const AdminPayouts = lazy(() => import('./pages/admin/Payouts'));
 
 const L = (p) => lazy(() => import(`./pages/resources/${p}.jsx`));
 const LN = (p) => lazy(() => import(`./pages/resources/niches/${p}.jsx`));
@@ -363,6 +371,7 @@ export default function App() {
             <Route path="/blog/category/:slug" element={<BlogCategory />} />
             <Route path="/blog/:slug" element={<BlogPost />} />
             <Route path="/directory" element={<Directory />} />
+            <Route path="/ambassador" element={<Ambassador />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/disclaimer" element={<Disclaimer />} />
@@ -370,6 +379,18 @@ export default function App() {
               <Route key={path} path={path} element={<Component />} />
             ))}
           </Route>
+
+          {/* Ambassador — standalone layouts (signup/login/portal), no site nav */}
+          <Route path="/ambassador/signup" element={<AmbassadorSignup />} />
+          <Route path="/ambassador/login" element={<AmbassadorLogin />} />
+          <Route
+            path="/ambassador/portal"
+            element={
+              <AmbassadorRoute>
+                <AmbassadorPortal />
+              </AmbassadorRoute>
+            }
+          />
 
           {/* Admin — no Navbar/Footer, own layout */}
           <Route path="/admin/login" element={<AdminLogin />} />
@@ -405,6 +426,9 @@ export default function App() {
             <Route path="directory" element={<AdminDirectory />} />
             <Route path="directory/new" element={<AdminDirectoryMemberEditor />} />
             <Route path="directory/:id/edit" element={<AdminDirectoryMemberEditor />} />
+            <Route path="ambassadors" element={<AdminAmbassadors />} />
+            <Route path="referrals" element={<AdminReferrals />} />
+            <Route path="payouts" element={<AdminPayouts />} />
             <Route path="settings" element={<AdminSettings />} />
           </Route>
         </Routes>

@@ -20,14 +20,22 @@ export default function Login() {
     setLoading(true);
     setError('');
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
 
     if (error) {
       setError('Invalid email or password');
       setLoading(false);
-    } else {
-      navigate('/admin');
+      return;
     }
+
+    // Route by role so ambassadors who land here end up in their portal.
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('role')
+      .eq('user_id', data.user.id)
+      .maybeSingle();
+
+    navigate(profile?.role === 'admin' ? '/admin' : '/ambassador');
   }
 
   return (
