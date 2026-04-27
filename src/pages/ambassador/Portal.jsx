@@ -690,6 +690,16 @@ function AccountTab({ ambassador, reload }) {
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
 
+  const [emailForm, setEmailForm] = useState({ new_email: '' });
+  const [emailSaving, setEmailSaving] = useState(false);
+  const [emailMsg, setEmailMsg] = useState('');
+  const [emailErr, setEmailErr] = useState('');
+
+  const [pwForm, setPwForm] = useState({ new_password: '', confirm_password: '' });
+  const [pwSaving, setPwSaving] = useState(false);
+  const [pwMsg, setPwMsg] = useState('');
+  const [pwErr, setPwErr] = useState('');
+
   const update = (k) => (e) => setForm((f) => ({ ...f, [k]: e.target.value }));
 
   async function handleSave(e) {
@@ -718,6 +728,66 @@ function AccountTab({ ambassador, reload }) {
     reload();
   }
 
+  async function handleEmailChange(e) {
+    e.preventDefault();
+    setEmailSaving(true);
+    setEmailMsg('');
+    setEmailErr('');
+
+    const newEmail = emailForm.new_email.trim().toLowerCase();
+    if (!newEmail) {
+      setEmailErr('Enter a new email.');
+      setEmailSaving(false);
+      return;
+    }
+
+    const { error: authErr } = await supabase.auth.updateUser({ email: newEmail });
+    if (authErr) {
+      setEmailErr(authErr.message);
+      setEmailSaving(false);
+      return;
+    }
+
+    // Keep the ambassador row's contact email in sync so Tracy's admin view
+    // matches what they actually log in with. Auth.users won't flip until the
+    // confirmation link is clicked, but the contact email can update now.
+    await supabase.from('ambassadors').update({ email: newEmail }).eq('id', ambassador.id);
+
+    setEmailMsg('Confirmation link sent to your new email. Click it to finish the change — until then, keep signing in with your current email.');
+    setEmailForm({ new_email: '' });
+    setEmailSaving(false);
+    reload();
+  }
+
+  async function handlePasswordChange(e) {
+    e.preventDefault();
+    setPwSaving(true);
+    setPwMsg('');
+    setPwErr('');
+
+    if (pwForm.new_password.length < 8) {
+      setPwErr('Use at least 8 characters.');
+      setPwSaving(false);
+      return;
+    }
+    if (pwForm.new_password !== pwForm.confirm_password) {
+      setPwErr('Passwords do not match.');
+      setPwSaving(false);
+      return;
+    }
+
+    const { error: authErr } = await supabase.auth.updateUser({ password: pwForm.new_password });
+    if (authErr) {
+      setPwErr(authErr.message);
+      setPwSaving(false);
+      return;
+    }
+
+    setPwMsg('Password updated. Use the new password next time you sign in.');
+    setPwForm({ new_password: '', confirm_password: '' });
+    setPwSaving(false);
+  }
+
   return (
     <div className="space-y-6 max-w-2xl">
       <div>
@@ -733,7 +803,7 @@ function AccountTab({ ambassador, reload }) {
         <Readonly label="Founding Ambassador" value={ambassador.founding_ambassador ? 'Yes' : 'Not yet'} />
       </div>
 
-      {/* Editable */}
+      {/* Editable profile */}
       <form onSubmit={handleSave} className="bg-white border border-cream-dark p-6 md:p-8 space-y-4">
         <FormField label="Full name" value={form.full_name} onChange={update('full_name')} required />
         <div className="grid sm:grid-cols-2 gap-4">
@@ -748,6 +818,63 @@ function AccountTab({ ambassador, reload }) {
         <div className="flex justify-end pt-2">
           <button type="submit" disabled={saving} className="bg-navy text-white px-6 py-2.5 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy/85 disabled:opacity-70 transition-colors">
             {saving ? 'Saving…' : 'Save changes'}
+          </button>
+        </div>
+      </form>
+
+      {/* Login & Security */}
+      <div>
+        <h2 className="font-heading text-xl font-bold text-navy mb-1">Login & Security</h2>
+        <p className="text-charcoal/60 text-sm">If someone set this account up for you, change your email and password here so only you can access it.</p>
+      </div>
+
+      <form onSubmit={handleEmailChange} className="bg-white border border-cream-dark p-6 md:p-8 space-y-4">
+        <p className="text-[0.65rem] font-bold tracking-[0.15em] uppercase text-charcoal/60">Login email</p>
+        <p className="text-charcoal/70 text-sm">
+          Currently signed in as <span className="font-mono text-navy break-all">{ambassador.email}</span>. Enter a new email below — we'll send a confirmation link to that address. Until you click it, keep signing in with your current email.
+        </p>
+        <FormField
+          label="New email"
+          type="email"
+          value={emailForm.new_email}
+          onChange={(e) => setEmailForm({ new_email: e.target.value })}
+          required
+        />
+        {emailMsg && <p className="text-green-700 text-xs">{emailMsg}</p>}
+        {emailErr && <p className="text-red-700 text-xs">{emailErr}</p>}
+        <div className="flex justify-end pt-2">
+          <button type="submit" disabled={emailSaving} className="bg-navy text-white px-6 py-2.5 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy/85 disabled:opacity-70 transition-colors">
+            {emailSaving ? 'Sending…' : 'Send confirmation link'}
+          </button>
+        </div>
+      </form>
+
+      <form onSubmit={handlePasswordChange} className="bg-white border border-cream-dark p-6 md:p-8 space-y-4">
+        <p className="text-[0.65rem] font-bold tracking-[0.15em] uppercase text-charcoal/60">Password</p>
+        <p className="text-charcoal/70 text-sm">Set a new password (at least 8 characters). The change is immediate.</p>
+        <FormField
+          label="New password"
+          type="password"
+          value={pwForm.new_password}
+          onChange={(e) => setPwForm((f) => ({ ...f, new_password: e.target.value }))}
+          required
+          minLength={8}
+          autoComplete="new-password"
+        />
+        <FormField
+          label="Confirm new password"
+          type="password"
+          value={pwForm.confirm_password}
+          onChange={(e) => setPwForm((f) => ({ ...f, confirm_password: e.target.value }))}
+          required
+          minLength={8}
+          autoComplete="new-password"
+        />
+        {pwMsg && <p className="text-green-700 text-xs">{pwMsg}</p>}
+        {pwErr && <p className="text-red-700 text-xs">{pwErr}</p>}
+        <div className="flex justify-end pt-2">
+          <button type="submit" disabled={pwSaving} className="bg-navy text-white px-6 py-2.5 text-xs font-semibold tracking-[0.2em] uppercase hover:bg-navy/85 disabled:opacity-70 transition-colors">
+            {pwSaving ? 'Updating…' : 'Update password'}
           </button>
         </div>
       </form>
